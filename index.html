@@ -1274,8 +1274,24 @@ function goBack() {
 }
 
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('open');
 }
+
+// Đóng sidebar khi click ra ngoài (mobile)
+document.addEventListener('click', function(event) {
+  const sidebar = document.getElementById('sidebar');
+  const hamburger = document.querySelector('.hamburger');
+  
+  if (!sidebar || !hamburger) return;
+
+  // Nếu sidebar đang mở và click không nằm trong sidebar cũng không phải nút hamburger
+  if (sidebar.classList.contains('open') && 
+      !sidebar.contains(event.target) && 
+      !hamburger.contains(event.target)) {
+    sidebar.classList.remove('open');
+  }
+});
 
 // Dark Mode đã được bỏ
 
