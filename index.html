@@ -1088,7 +1088,10 @@ function filterCompanies(query = '') {
   container.innerHTML = companies.map(c => `
     <div class="job-card" onclick="showCompanyJobs('${c.company}')">
       <div class="job-header">
-        <div style="width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:19px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${c.logo}</div>
+        ${c.logo && c.logo.startsWith('http') 
+          ? `<img src="${c.logo}" style="width:56px; height:56px; object-fit:contain; border-radius:12px; border:1px solid #E2E8F0;" alt="${c.company}">`
+          : `<div style="width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:19px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${c.logo || c.company.substring(0,2).toUpperCase()}</div>`
+        }
         <div class="job-info">
           <h3>${c.company}</h3>
           <div class="company">${c.count} vị trí • ${c.slots} chỉ tiêu</div>
