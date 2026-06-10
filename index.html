@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hội Chợ Việc Làm DUE 2026 • Trường Đại học Kinh tế - Đại học Đà Nẵng</title>
+<title>Hội Chợ Việc Làm DUE 2026 • Đại học Kinh tế - ĐH Đà Nẵng</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 <style>
@@ -335,10 +335,10 @@ body.dark-mode .nav-link:hover {
 /* ===== FILTERS ===== */
 .filters {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .filter-select {
@@ -395,16 +395,16 @@ body.dark-mode .nav-link:hover {
 .job-card {
   background: white;
   border: 1px solid #E2E8F0;
-  border-radius: 22px;
-  padding: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  border-radius: 20px;
+  padding: 22px 24px;
+  transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
   cursor: pointer;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06);
 }
 
 .job-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   border-color: #CBD5E1;
 }
 
@@ -653,12 +653,6 @@ body.dark-mode .nav-link:hover {
         <span>Đã lưu</span>
       </button>
     </div>
-
-    <!-- MỤC LỤC NGÀNH NGHỀ (Left Sidebar) -->
-    <div class="nav-section" style="margin-top: 20px;">
-      <div class="nav-label">Mục lục ngành nghề</div>
-      <div id="sidebar-majors" style="display: flex; flex-direction: column; gap: 2px;"></div>
-    </div>
   </aside>
 
   <!-- MAIN CONTENT -->
@@ -738,14 +732,6 @@ body.dark-mode .nav-link:hover {
           <option>Toàn thời gian</option>
           <option>Bán thời gian</option>
           <option>Thực tập</option>
-        </select>
-        <select id="filter-salary" class="filter-select" onchange="filterJobs()">
-          <option value="">Mức lương</option>
-          <option value="0">Tất cả</option>
-          <option value="5000000">≥ 5 triệu</option>
-          <option value="7000000">≥ 7 triệu</option>
-          <option value="10000000">≥ 10 triệu</option>
-          <option value="15000000">≥ 15 triệu</option>
         </select>
         <div style="margin-left:auto; font-weight:700; color:#475569; font-size:15px;" id="count-bar"></div>
       </div>
@@ -876,7 +862,6 @@ function initUI() {
   buildMajorGrid();
   buildMajorSelect();
   buildMajorChips();
-  buildSidebarMajors();
   showScreen('home');
   filterJobs();
 }
@@ -908,28 +893,6 @@ function buildMajorChips() {
     MAJORS.map(m => `<span onclick="setMajorFilter('${m.id}')" class="chip">${m.icon} ${m.name}</span>`).join('');
 }
 
-// MỚI: Xây dựng mục lục ngành nghề ở sidebar bên trái
-function buildSidebarMajors() {
-  const container = document.getElementById('sidebar-majors');
-  if (!container) return;
-
-  container.innerHTML = MAJORS.map(m => `
-    <button onclick="selectMajorFromSidebar('${m.id}')" 
-            style="display:flex; align-items:center; gap:10px; width:100%; padding:9px 12px; 
-                   background:none; border:none; border-radius:10px; color:#CBD5E1; 
-                   font-size:13.5px; text-align:left; cursor:pointer; transition:all 0.2s;">
-      <span style="font-size:16px; width:22px;">${m.icon}</span>
-      <span style="font-weight:500;">${m.name}</span>
-    </button>
-  `).join('');
-}
-
-function selectMajorFromSidebar(id) {
-  showScreen('jobs');
-  document.getElementById('filter-major').value = id;
-  filterJobs();
-}
-
 function setMajorFilter(id) {
   document.getElementById('filter-major').value = id;
   filterJobs();
@@ -955,7 +918,6 @@ function filterJobs() {
   const q = document.getElementById('search-input').value.toLowerCase();
   const major = document.getElementById('filter-major').value;
   const type = document.getElementById('filter-type').value;
-  const minSalary = parseInt(document.getElementById('filter-salary').value) || 0;
 
   let filtered = JOBS.filter(j => {
     const matchMajor = !major || j.majors.includes(major);
@@ -964,14 +926,7 @@ function filterJobs() {
     const searchText = (j.title + ' ' + j.company + ' ' + j.location + ' ' + j.desc + ' ' + j.majors.join(' ')).toLowerCase();
     const matchQuery = !q || searchText.includes(q);
     
-    // Lọc lương (chỉ lọc nếu salary có số)
-    let matchSalary = true;
-    if (minSalary > 0 && j.salary) {
-      const salaryNum = parseInt(j.salary.replace(/[^0-9]/g, '')) || 0;
-      matchSalary = salaryNum >= minSalary;
-    }
-    
-    return matchMajor && matchType && matchQuery && matchSalary;
+    return matchMajor && matchType && matchQuery;
   });
 
   document.getElementById('count-bar').textContent = `${filtered.length} vị trí`;
