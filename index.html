@@ -872,7 +872,24 @@ function buildMajorChips() {
 }
 
 function setMajorFilter(id) {
+  // Cập nhật dropdown
   document.getElementById('filter-major').value = id;
+  
+  // Cập nhật trạng thái active cho các chip
+  const chips = document.querySelectorAll('#major-chips .chip');
+  chips.forEach(chip => {
+    chip.classList.remove('active');
+    
+    // Chip "Tất cả"
+    if (id === '' && chip.textContent.includes('Tất cả')) {
+      chip.classList.add('active');
+    }
+    // Các chip ngành khác
+    if (chip.getAttribute('onclick') && chip.getAttribute('onclick').includes(`'${id}'`)) {
+      chip.classList.add('active');
+    }
+  });
+  
   filterJobs();
 }
 
@@ -896,6 +913,17 @@ function filterJobs() {
   const q = document.getElementById('search-input').value.toLowerCase();
   const major = document.getElementById('filter-major').value;
   const type = document.getElementById('filter-type').value;
+
+  // Đồng bộ active state cho chip khi lọc từ dropdown
+  const chips = document.querySelectorAll('#major-chips .chip');
+  chips.forEach(chip => {
+    chip.classList.remove('active');
+    if (major === '' && chip.textContent.includes('Tất cả')) {
+      chip.classList.add('active');
+    } else if (chip.getAttribute('onclick') && chip.getAttribute('onclick').includes(`'${major}'`)) {
+      chip.classList.add('active');
+    }
+  });
 
   // Hiệu ứng loading
   const countBar = document.getElementById('count-bar');
