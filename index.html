@@ -1100,12 +1100,33 @@ function toggleSave(id) {
 
 function quickApply(id) {
   const job = JOBS.find(j => j.id === id);
-  if (!job || !job.email) return;
+  if (!job || !job.email) {
+    alert("Không có email tuyển dụng cho vị trí này.");
+    return;
+  }
   
   const subject = encodeURIComponent(`Ứng tuyển vị trí: ${job.title} - ${job.company}`);
-  const body = encodeURIComponent(`Xin chào,\n\nEm là sinh viên Đại học Kinh tế Đà Nẵng, quan tâm đến vị trí "${job.title}" tại ${job.company}.\n\nEm xin gửi hồ sơ ứng tuyển đính kèm.\n\nTrân trọng,\n[Họ và tên]\n[Số điện thoại]\n[Email]`);
-  
-  window.location.href = `mailto:${job.email}?subject=${subject}&body=${body}`;
+  const body = encodeURIComponent(
+`Xin chào,
+
+Em là sinh viên Đại học Kinh tế Đà Nẵng, quan tâm đến vị trí "${job.title}" tại ${job.company}.
+
+Em xin gửi hồ sơ ứng tuyển đính kèm theo email này.
+
+Trân trọng,
+[Họ và tên]
+[Số điện thoại]
+[Email]`
+  );
+
+  // Cách ổn định hơn để mở mailto
+  const mailtoLink = `mailto:${job.email}?subject=${subject}&body=${body}`;
+  const link = document.createElement('a');
+  link.href = mailtoLink;
+  link.target = '_self';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 function renderSaved() {
