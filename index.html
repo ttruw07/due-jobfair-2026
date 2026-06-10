@@ -1104,10 +1104,9 @@ function quickApply(id) {
     alert("Không có email tuyển dụng cho vị trí này.");
     return;
   }
-  
+
   const subject = encodeURIComponent(`Ứng tuyển vị trí: ${job.title} - ${job.company}`);
-  const body = encodeURIComponent(
-`Xin chào,
+  const bodyText = `Xin chào,
 
 Em là sinh viên Đại học Kinh tế Đà Nẵng, quan tâm đến vị trí "${job.title}" tại ${job.company}.
 
@@ -1116,17 +1115,32 @@ Em xin gửi hồ sơ ứng tuyển đính kèm theo email này.
 Trân trọng,
 [Họ và tên]
 [Số điện thoại]
-[Email]`
-  );
+[Email]`;
 
-  // Cách ổn định hơn để mở mailto
+  const body = encodeURIComponent(bodyText);
   const mailtoLink = `mailto:${job.email}?subject=${subject}&body=${body}`;
-  const link = document.createElement('a');
-  link.href = mailtoLink;
-  link.target = '_self';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+
+  // Thử mở mail client
+  try {
+    window.open(mailtoLink, '_self');
+  } catch (e) {
+    // Fallback nếu bị chặn
+    const fallback = confirm(
+      `Không thể mở ứng dụng email tự động.\n\n` +
+      `Email tuyển dụng: ${job.email}\n\n` +
+      `Bạn có muốn copy nội dung email không?`
+    );
+    
+    if (fallback) {
+      navigator.clipboard.writeText(
+        `Email: ${job.email}\nTiêu đề: Ứng tuyển vị trí: ${job.title} - ${job.company}\n\n${bodyText}`
+      ).then(() => {
+        alert("Đã copy nội dung email vào clipboard. Bạn có thể paste vào Gmail.");
+      }).catch(() => {
+        alert(`Vui lòng gửi email đến: ${job.email}\n\nTiêu đề: Ứng tuyển vị trí: ${job.title}`);
+      });
+    }
+  }
 }
 
 function renderSaved() {
