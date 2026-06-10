@@ -982,54 +982,6 @@ function filterJobs() {
   }, 120);
 }
 
-  const container = document.getElementById('job-list');
-  if (!filtered.length) {
-    container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px 20px; color:#64748B;">Không tìm thấy vị trí phù hợp.</div>`;
-    return;
-  }
-
-  container.innerHTML = filtered.map(job => `
-    <div class="job-card" onclick="showDetail(${job.id})">
-      <div class="job-header" style="margin-bottom:14px;">
-        ${getLogoHTML(job, 52)}
-        <div class="job-info">
-          <h3 style="font-size:17px; line-height:1.3; margin-bottom:4px;">${job.title}</h3>
-          <div class="company" style="font-size:14.5px;">${job.company}</div>
-        </div>
-      </div>
-
-      <!-- Key Info Row -->
-      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; font-size:13.5px; color:#475569;">
-        <span>📍 ${job.location}</span>
-        <span>•</span>
-        <span>${job.salary}</span>
-        ${job.deadline ? `<span style="color:#DC2626; font-weight:600;">• Hạn: ${job.deadline}</span>` : ''}
-      </div>
-
-      <!-- Tags -->
-      <div class="tags" style="margin-bottom:10px;">
-        ${job.is_new ? `<span class="tag" style="background:#FEE2E2; color:#DC2626; font-weight:700;">MỚI</span>` : ''}
-        ${job.majors.slice(0,2).map(mid => {
-          const m = MAJORS.find(x => x.id === mid);
-          return m ? `<span class="tag tag-major">${m.name}</span>` : '';
-        }).join('')}
-        ${job.majors.length > 2 ? `<span class="tag" style="background:#F1F5F9; color:#64748B;">+${job.majors.length - 2}</span>` : ''}
-        <span class="tag tag-type">${job.type}</span>
-      </div>
-
-      <!-- Footer -->
-      <div class="job-footer" style="padding-top:12px; margin-top:4px;">
-        <div style="font-size:13px; color:#64748B;">
-          ${job.count} chỉ tiêu
-        </div>
-        <div style="font-size:12.5px; font-weight:700; padding:5px 12px; border-radius:9999px; background:${job.majors.includes(major) ? '#DCFCE7' : '#F1F5F9'}; color:${job.majors.includes(major) ? '#166534' : '#64748B'};">
-          ${job.majors.includes(major) ? '✓ Phù hợp' : 'Xem chi tiết'}
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
 // ==================== DETAIL ====================
 function showDetail(id) {
   const job = JOBS.find(j => j.id === id);
