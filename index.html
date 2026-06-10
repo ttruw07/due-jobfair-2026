@@ -493,11 +493,101 @@ body {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 640px) {
-  .hero { padding: 32px 24px; }
-  .hero h1 { font-size: 30px; }
-  .hero-stats { flex-direction: column; gap: 16px; }
+/* ===== RESPONSIVE - MOBILE OPTIMIZATION ===== */
+@media (max-width: 1024px) {
+  .main {
+    padding: 20px 16px;
+  }
+  
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .search-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 260px;
+  }
+  
+  .hero {
+    padding: 32px 24px;
+    border-radius: 20px;
+  }
+  
+  .hero h1 {
+    font-size: 28px;
+    line-height: 1.15;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .stat strong {
+    font-size: 26px;
+  }
+  
+  .job-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .job-card {
+    padding: 20px;
+  }
+  
+  .detail-header {
+    padding: 24px 20px;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .detail-body {
+    padding: 24px 20px;
+    border-radius: 0 0 20px 20px;
+  }
+  
+  /* Make detail content stack on mobile */
+  .detail-body > div {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-select {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .chip-container {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 24px;
+  }
+  
+  .hero h1 {
+    font-size: 24px;
+  }
+  
+  .company-logo {
+    width: 48px;
+    height: 48px;
+    font-size: 17px;
+  }
 }
 </style>
 </head>
@@ -546,6 +636,12 @@ body {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2 3 3 0 003 3 3 3 0 003-3 2 2 0 012 2v0a2 2 0 01-2 2H7a2 2 0 01-2-2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8" /></svg>
         <span>Đã lưu</span>
       </button>
+    </div>
+
+    <!-- MỤC LỤC NGÀNH NGHỀ (Left Sidebar) -->
+    <div class="nav-section" style="margin-top: 20px;">
+      <div class="nav-label">Mục lục ngành nghề</div>
+      <div id="sidebar-majors" style="display: flex; flex-direction: column; gap: 2px;"></div>
     </div>
   </aside>
 
@@ -730,6 +826,7 @@ function initUI() {
   buildMajorGrid();
   buildMajorSelect();
   buildMajorChips();
+  buildSidebarMajors();           // ← Mới thêm: Mục lục ngành ở sidebar
   showScreen('home');
   filterJobs();
 }
@@ -759,6 +856,28 @@ function buildMajorChips() {
   const container = document.getElementById('major-chips');
   container.innerHTML = `<span onclick="setMajorFilter('')" class="chip active">Tất cả</span>` +
     MAJORS.map(m => `<span onclick="setMajorFilter('${m.id}')" class="chip">${m.icon} ${m.name}</span>`).join('');
+}
+
+// MỚI: Xây dựng mục lục ngành nghề ở sidebar bên trái
+function buildSidebarMajors() {
+  const container = document.getElementById('sidebar-majors');
+  if (!container) return;
+
+  container.innerHTML = MAJORS.map(m => `
+    <button onclick="selectMajorFromSidebar('${m.id}')" 
+            style="display:flex; align-items:center; gap:10px; width:100%; padding:9px 12px; 
+                   background:none; border:none; border-radius:10px; color:#CBD5E1; 
+                   font-size:13.5px; text-align:left; cursor:pointer; transition:all 0.2s;">
+      <span style="font-size:16px; width:22px;">${m.icon}</span>
+      <span style="font-weight:500;">${m.name}</span>
+    </button>
+  `).join('');
+}
+
+function selectMajorFromSidebar(id) {
+  showScreen('jobs');
+  document.getElementById('filter-major').value = id;
+  filterJobs();
 }
 
 function setMajorFilter(id) {
@@ -851,27 +970,34 @@ function showDetail(id) {
             ${job.jd.length ? `<div style="margin-bottom:30px;"><h4 style="font-size:13px; color:#64748B; margin-bottom:8px; font-weight:700;">MÔ TẢ CÔNG VIỆC</h4><ul style="padding-left:22px; color:#334155;">${job.jd.map(x => `<li style="margin-bottom:6px;">${x}</li>`).join('')}</ul></div>` : ''}
           </div>
 
-          <!-- Apply Form -->
+          <!-- Contact Information -->
           <div style="background:#F8FAFC; border-radius:22px; padding:26px; position:sticky; top:20px; height:fit-content;">
-            <h3 style="margin-top:0;">Ứng tuyển ngay</h3>
-            <div style="margin:18px 0 12px;">
-              <label style="font-size:12.5px; font-weight:700; color:#64748B;">Họ và tên *</label>
-              <input id="apply-name" type="text" style="width:100%; padding:11px 14px; border:1px solid #CBD5E1; border-radius:12px; margin-top:5px; font-size:15px;">
-            </div>
-            <div style="margin:18px 0 12px;">
-              <label style="font-size:12.5px; font-weight:700; color:#64748B;">Email sinh viên *</label>
-              <input id="apply-email" type="email" placeholder="svXXXX@due.edu.vn" style="width:100%; padding:11px 14px; border:1px solid #CBD5E1; border-radius:12px; margin-top:5px; font-size:15px;">
-            </div>
-            <div style="margin:18px 0 12px;">
-              <label style="font-size:12.5px; font-weight:700; color:#64748B;">Mã số sinh viên *</label>
-              <input id="apply-mssv" type="text" style="width:100%; padding:11px 14px; border:1px solid #CBD5E1; border-radius:12px; margin-top:5px; font-size:15px;">
+            <h3 style="margin-top:0; margin-bottom:16px;">Thông tin liên hệ</h3>
+            
+            <div style="margin-bottom:14px;">
+              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Email tuyển dụng</div>
+              <div style="font-size:15px; font-weight:600;">${job.email || 'tuyendung@' + job.company.toLowerCase().replace(/\s+/g, '') + '.com'}</div>
             </div>
             
-            <button onclick="submitApplication()" class="btn btn-primary" style="width:100%; margin-top:10px;">Gửi hồ sơ ứng tuyển</button>
+            <div style="margin-bottom:14px;">
+              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Số điện thoại</div>
+              <div style="font-size:15px; font-weight:600;">${job.phone || '0236 123 4567'}</div>
+            </div>
             
-            <button onclick="toggleSave(${job.id})" style="width:100%; margin-top:12px; padding:12px; background:white; border:1px solid #CBD5E1; border-radius:14px; font-weight:700; font-size:14.5px;">
-              ${savedJobs.has(job.id) ? '❤️ Đã lưu' : '🤍 Lưu việc làm'}
-            </button>
+            <div style="margin-bottom:18px;">
+              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Website</div>
+              <div style="font-size:15px; font-weight:600;">
+                <a href="${job.website || '#'}" target="_blank" style="color:#1E40AF; text-decoration:none;">
+                  ${job.website || 'www.' + job.company.toLowerCase().replace(/\s+/g, '') + '.com.vn'}
+                </a>
+              </div>
+            </div>
+
+            <div style="padding-top:16px; border-top:1px solid #E2E8F0;">
+              <button onclick="toggleSave(${job.id})" style="width:100%; padding:12px; background:white; border:1px solid #CBD5E1; border-radius:14px; font-weight:700; font-size:14.5px;">
+                ${savedJobs.has(job.id) ? '❤️ Đã lưu' : '🤍 Lưu việc làm'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -959,10 +1085,12 @@ function showCompanyJobs(company) {
 
 // ==================== NAVIGATION ====================
 function showScreen(screen) {
+  // Hide all screens
   document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
   const el = document.getElementById('screen-' + screen);
   if (el) el.style.display = 'block';
 
+  // Update page title
   const titles = {
     home: {title: 'Tổng quan', sub: 'Chọn ngành để xem cơ hội việc làm phù hợp nhất'},
     jobs: {title: 'Tất cả việc làm', sub: 'Tìm kiếm và lọc theo ngành, hình thức làm việc'},
@@ -978,10 +1106,25 @@ function showScreen(screen) {
 
   currentScreen = screen;
 
+  // Update active nav link
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+  
+  if (screen === 'home') {
+    document.querySelector('.nav-link[onclick*="home"]')?.classList.add('active');
+  } else if (screen === 'jobs' || screen === 'detail') {
+    document.getElementById('nav-jobs')?.classList.add('active');
+  } else if (screen === 'companies') {
+    document.querySelector('.nav-link[onclick*="companies"]')?.classList.add('active');
+  } else if (screen === 'saved') {
+    document.querySelector('.nav-link[onclick*="saved"]')?.classList.add('active');
+  }
+
+  // Special renders
   if (screen === 'saved') renderSaved();
   if (screen === 'companies') filterCompanies();
   if (screen === 'jobs') filterJobs();
 
+  // Close sidebar on mobile
   if (window.innerWidth <= 1024) {
     document.getElementById('sidebar').classList.remove('open');
   }
