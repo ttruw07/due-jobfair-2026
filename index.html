@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hội Chợ Việc Làm DUE 2026 • Đại học Kinh tế - ĐH Đà Nẵng</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --primary: #1E3A8A;
@@ -598,12 +598,6 @@ body {
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand" onclick="showScreen('home')">
       <div class="sidebar-logo">
-        <!-- 
-          === HƯỚNG DẪN LOGO ===
-          1. Tải logo từ Google Drive (Logo DUE-1.png hoặc DUE-2.png khuyến nghị)
-          2. Đặt cùng thư mục với file HTML này
-          3. Đổi src thành: src="Logo DUE-1.png"
-        -->
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Logo_Kinh_t%E1%BA%BF_%C4%90%C3%A0_N%E1%BA%B5ng.jpg/200px-Logo_Kinh_t%E1%BA%BF_%C4%90%C3%A0_N%E1%BA%B5ng.jpg" 
              alt="Logo DUE" style="max-width: 44px; max-height: 44px;">
       </div>
@@ -749,6 +743,8 @@ body {
 
 <script>
 // ==================== CONFIG ====================
+// Sheet ID mới: 1RIP1xE02orm56CsyxYL2To_NO4ZjE9PkrgQdXjsXTiw
+
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT25DlAHBhi-VuKvGlJOP_WhjtMw-lPF-Syuz7_udrEWw10z0Q8kMS2Y2wbZf4k-n7eYx1zMTqTG-Js/pub?gid=210076867&single=true&output=csv";
 
 const MAJORS = [
@@ -776,7 +772,8 @@ async function loadData() {
     JOBS = rows.map((r, i) => ({
       id: i + 1,
       company: r.company || '',
-      logo: (r.company || '??').substring(0, 2).toUpperCase(),
+      // logo giờ dùng để chứa URL ảnh (hoặc để trống thì tự sinh 2 chữ)
+      logo: r.logo || '',
       title: r.title || '',
       majors: (r.majors || '').split('|').map(m => m.trim()).filter(Boolean),
       type: r.type || 'Toàn thời gian',
@@ -787,6 +784,11 @@ async function loadData() {
       jd: (r.jd || '').split('|').map(s => s.trim()).filter(Boolean),
       req: (r.req || '').split('|').map(s => s.trim()).filter(Boolean),
       welfare: (r.welfare || '').split('|').map(s => s.trim()).filter(Boolean),
+      
+      // Thông tin liên hệ từ Google Sheet (nhập thủ công)
+      email: r.email || '',
+      phone: r.phone || '',
+      website: r.website || '',
     }));
     
     initUI();
@@ -826,7 +828,7 @@ function initUI() {
   buildMajorGrid();
   buildMajorSelect();
   buildMajorChips();
-  buildSidebarMajors();           // ← Mới thêm: Mục lục ngành ở sidebar
+  buildSidebarMajors();
   showScreen('home');
   filterJobs();
 }
@@ -885,6 +887,21 @@ function setMajorFilter(id) {
   filterJobs();
 }
 
+// Helper: Render logo (ảnh hoặc chữ cái)
+function getLogoHTML(job, size = 56) {
+  const logoValue = job.logo || '';
+  
+  // Nếu cột logo chứa link ảnh (bắt đầu bằng http)
+  if (logoValue.startsWith('http')) {
+    return `<img src="${logoValue}" style="width:${size}px; height:${size}px; object-fit:contain; border-radius:12px; border:1px solid #E2E8F0;" alt="${job.company}">`;
+  } 
+  // Nếu để trống hoặc là chữ cái → hiển thị 2 chữ cái viết tắt
+  else {
+    const initials = logoValue || (job.company || '??').substring(0, 2).toUpperCase();
+    return `<div style="width:${size}px; height:${size}px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:${Math.floor(size*0.38)}px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${initials}</div>`;
+  }
+}
+
 // ==================== JOBS ====================
 function filterJobs() {
   const q = document.getElementById('search-input').value.toLowerCase();
@@ -909,7 +926,7 @@ function filterJobs() {
   container.innerHTML = filtered.map(job => `
     <div class="job-card" onclick="showDetail(${job.id})">
       <div class="job-header">
-        <div class="company-logo">${job.logo}</div>
+        ${getLogoHTML(job, 56)}
         <div class="job-info">
           <h3>${job.title}</h3>
           <div class="company">${job.company}</div>
@@ -944,7 +961,7 @@ function showDetail(id) {
         <button onclick="goBack()" style="background:rgba(255,255,255,0.2); color:white; border:none; padding:9px 18px; border-radius:9999px; margin-bottom:24px; cursor:pointer; font-weight:600;">← Quay lại danh sách</button>
         
         <div style="display:flex; gap:18px; align-items:center;">
-          <div style="width:68px; height:68px; background:rgba(255,255,255,0.2); border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:800;">${job.logo}</div>
+          ${getLogoHTML(job, 68)}
           <div>
             <h2 style="margin:0; font-size:26px; font-weight:800;">${job.title}</h2>
             <p style="margin:6px 0 0; opacity:0.85; font-size:15.5px;">${job.company} • ${job.location}</p>
@@ -976,20 +993,24 @@ function showDetail(id) {
             
             <div style="margin-bottom:14px;">
               <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Email tuyển dụng</div>
-              <div style="font-size:15px; font-weight:600;">${job.email || 'tuyendung@' + job.company.toLowerCase().replace(/\s+/g, '') + '.com'}</div>
+              <div style="font-size:15px; font-weight:600;">
+                ${job.email ? `<a href="mailto:${job.email}" style="color:#1E40AF; text-decoration:none;">${job.email}</a>` : 'Chưa có thông tin'}
+              </div>
             </div>
             
             <div style="margin-bottom:14px;">
               <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Số điện thoại</div>
-              <div style="font-size:15px; font-weight:600;">${job.phone || '0236 123 4567'}</div>
+              <div style="font-size:15px; font-weight:600;">
+                ${job.phone ? job.phone : 'Chưa có thông tin'}
+              </div>
             </div>
             
             <div style="margin-bottom:18px;">
               <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Website</div>
               <div style="font-size:15px; font-weight:600;">
-                <a href="${job.website || '#'}" target="_blank" style="color:#1E40AF; text-decoration:none;">
-                  ${job.website || 'www.' + job.company.toLowerCase().replace(/\s+/g, '') + '.com.vn'}
-                </a>
+                ${job.website 
+                  ? `<a href="${job.website.startsWith('http') ? job.website : 'https://' + job.website}" target="_blank" style="color:#1E40AF; text-decoration:none;">${job.website}</a>` 
+                  : 'Chưa có thông tin'}
               </div>
             </div>
 
@@ -1037,7 +1058,7 @@ function renderSaved() {
   container.innerHTML = saved.map(job => `
     <div class="job-card" onclick="showDetail(${job.id})">
       <div class="job-header">
-        <div class="company-logo">${job.logo}</div>
+        ${getLogoHTML(job, 56)}
         <div class="job-info">
           <h3>${job.title}</h3>
           <div class="company">${job.company}</div>
@@ -1067,7 +1088,7 @@ function filterCompanies(query = '') {
   container.innerHTML = companies.map(c => `
     <div class="job-card" onclick="showCompanyJobs('${c.company}')">
       <div class="job-header">
-        <div class="company-logo">${c.logo}</div>
+        <div style="width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:19px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${c.logo}</div>
         <div class="job-info">
           <h3>${c.company}</h3>
           <div class="company">${c.count} vị trí • ${c.slots} chỉ tiêu</div>
@@ -1085,12 +1106,10 @@ function showCompanyJobs(company) {
 
 // ==================== NAVIGATION ====================
 function showScreen(screen) {
-  // Hide all screens
   document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
   const el = document.getElementById('screen-' + screen);
   if (el) el.style.display = 'block';
 
-  // Update page title
   const titles = {
     home: {title: 'Tổng quan', sub: 'Chọn ngành để xem cơ hội việc làm phù hợp nhất'},
     jobs: {title: 'Tất cả việc làm', sub: 'Tìm kiếm và lọc theo ngành, hình thức làm việc'},
@@ -1119,12 +1138,10 @@ function showScreen(screen) {
     document.querySelector('.nav-link[onclick*="saved"]')?.classList.add('active');
   }
 
-  // Special renders
   if (screen === 'saved') renderSaved();
   if (screen === 'companies') filterCompanies();
   if (screen === 'jobs') filterJobs();
 
-  // Close sidebar on mobile
   if (window.innerWidth <= 1024) {
     document.getElementById('sidebar').classList.remove('open');
   }
