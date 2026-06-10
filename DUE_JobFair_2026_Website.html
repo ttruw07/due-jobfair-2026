@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hội Chợ Việc Làm DUE 2026 | Đại học Kinh tế - ĐH Đà Nẵng</title>
+<style>
+/* ========== CẤU HÌNH: Dán link Google Sheets CSV vào đây ========== */
+/* Xem file HUONG_DAN trong Excel để biết cách lấy link              */
+/* ================================================================== */
+
+:root {
+  --blue: #1D4ED8;
+  --blue-light: #EFF6FF;
+  --green: #15803D;
+  --green-light: #F0FDF4;
+  --purple: #7C3AED;
+  --purple-light: #FDF4FF;
+  --orange: #B45309;
+  --orange-light: #FFFBEB;
+  --red: #BE123C;
+  --red-light: #FFF1F2;
+  --text: #111827;
+  --text-secondary: #6B7280;
+  --border: #E5E7EB;
+  --bg: #F9FAFB;
+  --white: #FFFFFF;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; color: var(--text); background: var(--bg); min-height: 100vh; }
+
+/* ===== LAYOUT ===== */
+.app { max-width: 480px; margin: 0 auto; background: var(--white); min-height: 100vh; position: relative; display: flex; flex-direction: column; }
+.screen { display: none; flex-direction: column; flex: 1; }
+.screen.active { display: flex; }
+.scroll-area { flex: 1; overflow-y: auto; padding-bottom: 70px; }
+
+/* ===== HERO ===== */
+.hero { background: linear-gradient(135deg, #1D4ED8 0%, #7C3AED 100%); padding: 2rem 1.5rem 1.5rem; color: #fff; text-align: center; }
+.hero-logo { width: 56px; height: 56px; margin: 0 auto 12px; }
+.hero-logo img { width: 100%; height: 100%; object-fit: contain; }
+.hero-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 11px; margin-bottom: 10px; }
+.hero h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; line-height: 1.3; }
+.hero p { font-size: 13px; opacity: 0.88; }
+.stats-row { display: flex; gap: 10px; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
+.stat-chip { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 14px; text-align: center; }
+.stat-chip strong { display: block; font-size: 20px; font-weight: 600; }
+.stat-chip span { font-size: 10px; opacity: 0.85; }
+
+/* ===== SECTIONS ===== */
+.section { padding: 1.25rem 1.25rem 0; }
+.section-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--text); }
+
+/* ===== MAJOR GRID ===== */
+.major-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.major-btn { border: 1.5px solid var(--border); background: var(--white); padding: 10px 6px; border-radius: var(--radius-sm); cursor: pointer; text-align: center; font-size: 11px; color: var(--text-secondary); line-height: 1.3; transition: all .15s; }
+.major-btn:hover { border-color: var(--blue); color: var(--blue); }
+.major-btn.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue); font-weight: 600; }
+.major-icon { font-size: 20px; margin-bottom: 4px; }
+
+/* ===== SEARCH / FILTER ===== */
+.search-bar { padding: 10px 1.25rem 0; display: flex; flex-direction: column; gap: 8px; }
+.search-input-wrap { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--white); overflow: hidden; }
+.search-input-wrap svg { margin: 0 10px; color: var(--text-secondary); flex-shrink: 0; }
+.search-input-wrap input { border: none; outline: none; flex: 1; padding: 8px 0; font-size: 13px; color: var(--text); background: transparent; }
+.filter-row { display: flex; gap: 8px; }
+.filter-row select { flex: 1; padding: 7px 8px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; color: var(--text); background: var(--white); cursor: pointer; }
+
+/* ===== CHIPS ===== */
+.chip-row { display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; padding: 8px 1.25rem 0; scrollbar-width: none; }
+.chip-row::-webkit-scrollbar { display: none; }
+.chip { font-size: 11px; padding: 4px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--white); cursor: pointer; color: var(--text-secondary); white-space: nowrap; transition: all .15s; }
+.chip.active { background: var(--blue-light); color: var(--blue); border-color: var(--blue); font-weight: 600; }
+
+/* ===== COUNT BAR ===== */
+.count-bar { font-size: 11px; color: var(--text-secondary); padding: 8px 1.25rem 4px; }
+
+/* ===== JOB CARD ===== */
+.job-list { padding: 0 1.25rem; }
+.job-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 1rem; margin-bottom: 10px; cursor: pointer; transition: border-color .15s; }
+.job-card:hover { border-color: var(--blue); }
+.job-card-top { display: flex; gap: 12px; }
+.company-logo { width: 42px; height: 42px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; border: 1.5px solid var(--border); }
+.job-info { flex: 1; min-width: 0; }
+.job-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.company-name { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; }
+.tag-major { background: var(--blue-light); color: var(--blue); }
+.tag-type { background: var(--green-light); color: var(--green); }
+.tag-count { background: var(--purple-light); color: var(--purple); }
+.job-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.salary { font-size: 11px; color: var(--text-secondary); }
+.match-score { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+.match-high { background: #DCFCE7; color: var(--green); }
+.match-med { background: #FEF9C3; color: #A16207; }
+.match-none { background: #F3F4F6; color: var(--text-secondary); }
+
+/* ===== DETAIL ===== */
+.detail-header { background: linear-gradient(135deg, #1D4ED8, #7C3AED); padding: 1.25rem; color: #fff; }
+.back-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; margin-bottom: 12px; opacity: 0.85; background: none; border: none; color: #fff; }
+.detail-logo { width: 52px; height: 52px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; margin-bottom: 10px; background: rgba(255,255,255,0.2); color: #fff; }
+.detail-title { font-size: 18px; font-weight: 600; }
+.detail-sub { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+.detail-body { padding: 1.25rem; }
+.info-section { margin-bottom: 1.25rem; }
+.info-section h3 { font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .5px; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.info-item { background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
+.info-item label { font-size: 10px; color: var(--text-secondary); display: block; margin-bottom: 2px; }
+.info-item span { font-size: 13px; font-weight: 600; }
+.jd-box { background: var(--bg); border-radius: var(--radius-sm); padding: 12px; font-size: 13px; line-height: 1.7; color: var(--text-secondary); }
+.jd-box ul { padding-left: 1.2rem; }
+.jd-box li { margin-bottom: 4px; }
+.welfare-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.welfare-tag { background: var(--green-light); color: var(--green); font-size: 11px; padding: 4px 10px; border-radius: 20px; }
+
+/* ===== BUTTONS ===== */
+.btn-primary { width: 100%; padding: 12px; background: linear-gradient(90deg, #1D4ED8, #7C3AED); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; cursor: pointer; }
+.btn-primary:hover { opacity: 0.92; }
+.action-row { display: flex; gap: 8px; margin-top: 1rem; }
+.btn-save { width: 44px; height: 44px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .15s; }
+.btn-save.saved { border-color: var(--red); background: var(--red-light); color: var(--red); }
+
+/* ===== COMPANY CARD ===== */
+.company-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 1rem; margin-bottom: 10px; cursor: pointer; }
+.company-card:hover { border-color: var(--blue); }
+.company-meta { font-size: 11px; color: var(--text-secondary); margin-top: 6px; }
+
+/* ===== APPLY MODAL ===== */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: flex-end; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal-sheet { background: var(--white); border-radius: 16px 16px 0 0; padding: 1.5rem; width: 100%; max-width: 480px; }
+.modal-sheet h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; }
+.modal-sheet label { font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 4px; }
+.modal-sheet input, .modal-sheet select, .modal-sheet textarea { width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; color: var(--text); background: var(--white); margin-bottom: 10px; font-family: inherit; }
+.modal-sheet textarea { height: 80px; resize: none; }
+.modal-btns { display: flex; gap: 8px; margin-top: 4px; }
+.btn-cancel { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); font-size: 13px; cursor: pointer; }
+.btn-submit { flex: 2; padding: 10px; background: var(--blue); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; }
+
+/* ===== NAV ===== */
+.nav-bottom { display: flex; border-top: 1px solid var(--border); background: var(--white); position: sticky; bottom: 0; z-index: 100; }
+.nav-item { flex: 1; text-align: center; padding: 10px 4px 8px; cursor: pointer; font-size: 10px; color: var(--text-secondary); border: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.nav-item svg { width: 22px; height: 22px; }
+.nav-item.active { color: var(--blue); }
+
+/* ===== LOADING ===== */
+.loading-screen { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; padding: 3rem 1.25rem; color: var(--text-secondary); font-size: 14px; }
+.spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.no-results { text-align: center; padding: 2rem 1rem; color: var(--text-secondary); font-size: 14px; }
+.no-results svg { width: 40px; height: 40px; margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto; }
+.success-box { text-align: center; padding: 1.5rem 1rem; }
+.success-box svg { width: 48px; height: 48px; color: var(--green); display: block; margin: 0 auto 1rem; }
+.success-box h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.success-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.error-box { background: #FEF2F2; border: 1px solid #FECACA; border-radius: var(--radius-sm); padding: 1rem; margin: 1rem 1.25rem; font-size: 13px; color: #DC2626; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== HOME SCREEN ===== -->
+  <div class="screen active" id="screen-home">
+    <div class="scroll-area">
+      <div class="hero">
+        <div class="hero-badge">Đại học Kinh tế - ĐH Đà Nẵng • Kỷ niệm 50 năm</div>
+        <h1>Hội Chợ Việc Làm<br>DUE 2026</h1>
+        <p>Kết nối sinh viên tốt nghiệp với hàng trăm<br>cơ hội việc làm chất lượng</p>
+        <div class="stats-row">
+          <div class="stat-chip"><strong id="stat-companies">--</strong><span>Doanh nghiệp</span></div>
+          <div class="stat-chip"><strong id="stat-jobs">--</strong><span>Vị trí</span></div>
+          <div class="stat-chip"><strong id="stat-slots">--</strong><span>Chỉ tiêu</span></div>
+        </div>
+      </div>
+      <div id="home-loading" class="loading-screen">
+        <div class="spinner"></div>
+        Đang tải dữ liệu...
+      </div>
+      <div id="home-content" style="display:none">
+        <div class="section">
+          <div class="section-title">Bạn đang học ngành nào?</div>
+          <div class="major-grid" id="major-grid"></div>
+        </div>
+        <div style="padding: 1rem 1.25rem 1.5rem">
+          <button class="btn-primary" onclick="goToJobs()">
+            🔍 Tìm việc làm phù hợp
+          </button>
+        </div>
+      </div>
+    </div>
+    <nav class="nav-bottom">
+      <button class="nav-item active" onclick="showScreen('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Trang chủ
+      </button>
+      <button class="nav-item" onclick="showScreen('jobs')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Việc làm
+      </button>
+      <button class="nav-item" onclick="showScreen('companies')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>Doanh nghiệp
+      </button>
+      <button class="nav-item" onclick="showScreen('saved')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Đã lưu
+      </button>
+    </nav>
+  </div>
+
+  <!-- ===== JOBS SCREEN ===== -->
+  <div class="screen" id="screen-jobs">
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search-input" placeholder="Tìm vị trí, công ty..." oninput="filterJobs()">
+      </div>
+      <div class="filter-row">
+        <select id="filter-major" onchange="filterJobs(); syncChips()">
+          <option value="">Tất cả ngành</option>
+        </select>
+        <select id="filter-type" onchange="filterJobs()">
+          <option value="">Hình thức</option>
+          <option>Toàn thời gian</option>
+          <option>Bán thời gian</option>
+          <option>Thực tập</option>
+        </select>
+      </div>
+    </div>
+    <div class="chip-row" id="major-chips"></div>
+    <div class="count-bar" id="count-bar"></div>
+    <div class="scroll-area job-list" id="job-list" style="padding: 0 1.25rem 1.25rem;"></div>
+    <nav class="nav-bottom">
+      <button class="nav-item" onclick="showScreen('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Trang chủ
+      </button>
+      <button class="nav-item active" onclick="showScreen('jobs')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Việc làm
+      </button>
+      <button class="nav-item" onclick="showScreen('companies')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>Doanh nghiệp
+      </button>
+      <button class="nav-item" onclick="showScreen('saved')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Đã lưu
+      </button>
+    </nav>
+  </div>
+
+  <!-- ===== DETAIL SCREEN ===== -->
+  <div class="screen" id="screen-detail">
+    <div class="scroll-area" id="detail-content"></div>
+  </div>
+
+  <!-- ===== COMPANIES SCREEN ===== -->
+  <div class="screen" id="screen-companies">
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="Tìm doanh nghiệp..." oninput="filterCompanies(this.value)">
+      </div>
+    </div>
+    <div class="scroll-area" style="padding: 8px 1.25rem 1.25rem;" id="company-list"></div>
+    <nav class="nav-bottom">
+      <button class="nav-item" onclick="showScreen('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Trang chủ
+      </button>
+      <button class="nav-item" onclick="showScreen('jobs')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Việc làm
+      </button>
+      <button class="nav-item active" onclick="showScreen('companies')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>Doanh nghiệp
+      </button>
+      <button class="nav-item" onclick="showScreen('saved')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Đã lưu
+      </button>
+    </nav>
+  </div>
+
+  <!-- ===== SAVED SCREEN ===== -->
+  <div class="screen" id="screen-saved">
+    <div style="padding: 1rem 1.25rem 0.5rem; border-bottom: 1px solid var(--border);">
+      <div style="font-size:16px;font-weight:600;">Việc làm đã lưu</div>
+    </div>
+    <div class="scroll-area" style="padding: 8px 1.25rem 1.25rem;" id="saved-list">
+      <div class="no-results">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Chưa có việc làm nào được lưu
+      </div>
+    </div>
+    <nav class="nav-bottom">
+      <button class="nav-item" onclick="showScreen('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Trang chủ
+      </button>
+      <button class="nav-item" onclick="showScreen('jobs')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Việc làm
+      </button>
+      <button class="nav-item" onclick="showScreen('companies')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>Doanh nghiệp
+      </button>
+      <button class="nav-item active" onclick="showScreen('saved')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Đã lưu
+      </button>
+    </nav>
+  </div>
+
+  <!-- ===== APPLY MODAL ===== -->
+  <div class="modal-overlay" id="apply-modal">
+    <div class="modal-sheet" id="modal-content">
+      <h3>Ứng tuyển nhanh</h3>
+      <label>Họ và tên *</label>
+      <input type="text" id="apply-name" placeholder="Nguyễn Văn A">
+      <label>Email sinh viên *</label>
+      <input type="email" id="apply-email" placeholder="svXXXXXXX@due.edu.vn">
+      <label>Mã số sinh viên *</label>
+      <input type="text" id="apply-mssv" placeholder="23510XXXX">
+      <label>Ngành đang học</label>
+      <select id="apply-major"></select>
+      <label>Giới thiệu ngắn</label>
+      <textarea placeholder="Mình có kinh nghiệm về..."></textarea>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Hủy</button>
+        <button class="btn-submit" onclick="submitApply()">Gửi hồ sơ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   CẤU HÌNH — THAY LINK GOOGLE SHEETS CSV CỦA BẠN VÀO ĐÂY
+   ================================================================
+   Cách lấy link:
+   1. Mở Google Sheets chứa dữ liệu
+   2. File → Share → Publish to web
+   3. Chọn sheet "DANH_SACH_TUYEN_DUNG" → Định dạng "CSV" → Publish
+   4. Copy link và dán vào dòng SHEET_URL bên dưới
+   ================================================================ */
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT25DlAHBhi-VuKvGlJOP_WhjtMw-lPF-Syuz7_udrEWw10z0Q8kMS2Y2wbZf4k-n7eYx1zMTqTG-Js/pub?gid=210076867&single=true&output=csv";
+
+/* Màu logo tự động theo chữ cái đầu */
+const LOGO_COLORS = [
+  {bg:'#EFF6FF',text:'#1D4ED8'},{bg:'#F0FDF4',text:'#15803D'},
+  {bg:'#FDF4FF',text:'#7C3AED'},{bg:'#FFFBEB',text:'#B45309'},
+  {bg:'#FFF1F2',text:'#BE123C'},{bg:'#ECFDF5',text:'#059669'},
+  {bg:'#F5F3FF',text:'#6D28D9'},{bg:'#FFF7ED',text:'#C2410C'},
+];
+
+/* 19 ngành từ DUE */
+const MAJORS = [
+  {id:'ke-toan',      name:'Kế toán',              icon:'💰'},
+  {id:'kiem-toan',    name:'Kiểm toán',             icon:'🔍'},
+  {id:'tai-chinh',    name:'Tài chính - Ngân hàng', icon:'🏦'},
+  {id:'cong-nghe-tc', name:'Công nghệ tài chính',   icon:'💳'},
+  {id:'quan-tri',     name:'Quản trị kinh doanh',   icon:'📊'},
+  {id:'quan-tri-ks',  name:'Quản trị khách sạn',    icon:'🏨'},
+  {id:'quan-tri-dl',  name:'Du lịch & Lữ hành',     icon:'✈️'},
+  {id:'quan-tri-nl',  name:'Quản trị nhân lực',     icon:'👥'},
+  {id:'kinh-te',      name:'Kinh tế',               icon:'📈'},
+  {id:'thong-ke',     name:'Thống kê kinh tế',      icon:'📉'},
+  {id:'khoa-hoc-dl',  name:'Khoa học dữ liệu',      icon:'🤖'},
+  {id:'marketing',    name:'Marketing',              icon:'📣'},
+  {id:'thuong-mai',   name:'Thương mại điện tử',    icon:'🛒'},
+  {id:'kinh-doanh-tm',name:'Kinh doanh TM',         icon:'🤝'},
+  {id:'kinh-doanh-qt',name:'Kinh doanh quốc tế',   icon:'🌏'},
+  {id:'cntt',         name:'Hệ thống thông tin',    icon:'💻'},
+  {id:'luat',         name:'Luật',                  icon:'⚖️'},
+  {id:'luat-kt',      name:'Luật kinh tế',          icon:'📜'},
+  {id:'quan-ly-nn',   name:'Quản lý nhà nước',      icon:'🏛️'},
+];
+
+let JOBS = [];
+let selectedMajor = '';
+let savedJobs = new Set();
+let prevScreen = 'home';
+let currentJob = null;
+
+/* ===== LOAD DATA FROM GOOGLE SHEETS ===== */
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.split('\n');
+  if (lines.length < 2) return rows;
+  const headers = parseCSVRow(lines[0]);
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const vals = parseCSVRow(lines[i]);
+    if (!vals[0]) continue;
+    const obj = {};
+    headers.forEach((h, idx) => obj[h.trim()] = (vals[idx] || '').trim());
+    rows.push(obj);
+  }
+  return rows;
+}
+
+function parseCSVRow(line) {
+  const result = [];
+  let cur = '', inQuote = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQuote && line[i+1] === '"') { cur += '"'; i++; }
+      else inQuote = !inQuote;
+    } else if (c === ',' && !inQuote) {
+      result.push(cur); cur = '';
+    } else cur += c;
+  }
+  result.push(cur);
+  return result;
+}
+
+function getLogoColor(company) {
+  const idx = (company.charCodeAt(0) || 0) % LOGO_COLORS.length;
+  return LOGO_COLORS[idx];
+}
+
+function calcMatch(job) {
+  if (!selectedMajor) return null;
+  const majors = (job.majors || '').split('|').map(m => m.trim());
+  return majors.includes(selectedMajor) ? Math.floor(Math.random() * 10 + 88) : null;
+}
+
+async function loadData() {
+  try {
+    const res = await fetch(SHEET_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    JOBS = rows.map((r, i) => ({
+      id: i + 1,
+      company: r.company || '',
+      logo: r.logo || (r.company || '??').substring(0, 2).toUpperCase(),
+      title: r.title || '',
+      majors: (r.majors || '').split('|').map(m => m.trim()).filter(Boolean),
+      type: r.type || 'Toàn thời gian',
+      count: parseInt(r.count) || 1,
+      salary: r.salary || 'Thỏa thuận',
+      location: r.location || 'Đà Nẵng',
+      desc: r.desc || '',
+      jd: (r.jd || '').split('|').map(s => s.trim()).filter(Boolean),
+      req: (r.req || '').split('|').map(s => s.trim()).filter(Boolean),
+      welfare: (r.welfare || '').split('|').map(s => s.trim()).filter(Boolean),
+    }));
+    onDataLoaded();
+  } catch (e) {
+    showDataError(e.message);
+  }
+}
+
+function showDataError(msg) {
+  document.getElementById('home-loading').innerHTML =
+    `<div class="error-box">⚠️ Không thể tải dữ liệu.<br>Vui lòng kiểm tra lại SHEET_URL trong file HTML.<br><small>${msg}</small></div>`;
+}
+
+function onDataLoaded() {
+  document.getElementById('home-loading').style.display = 'none';
+  document.getElementById('home-content').style.display = '';
+  const companies = [...new Set(JOBS.map(j => j.company))];
+  const slots = JOBS.reduce((a, j) => a + j.count, 0);
+  document.getElementById('stat-companies').textContent = companies.length;
+  document.getElementById('stat-jobs').textContent = JOBS.length;
+  document.getElementById('stat-slots').textContent = slots + '+';
+  buildMajorGrid();
+  buildMajorSelect();
+  buildMajorChips();
+  buildApplyMajorSelect();
+  filterJobs();
+  renderCompanies();
+}
+
+/* ===== MAJOR GRID (HOME) ===== */
+function buildMajorGrid() {
+  const grid = document.getElementById('major-grid');
+  grid.innerHTML = MAJORS.map(m => `
+    <button class="major-btn ${m.id === selectedMajor ? 'selected' : ''}" onclick="selectMajor('${m.id}')">
+      <div class="major-icon">${m.icon}</div>
+      ${m.name}
+    </button>`).join('');
+}
+
+function selectMajor(id) {
+  selectedMajor = selectedMajor === id ? '' : id;
+  buildMajorGrid();
+}
+
+function buildMajorSelect() {
+  const sel = document.getElementById('filter-major');
+  sel.innerHTML = '<option value="">Tất cả ngành</option>' +
+    MAJORS.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+}
+
+function buildApplyMajorSelect() {
+  const sel = document.getElementById('apply-major');
+  sel.innerHTML = '<option value="">-- Chọn ngành --</option>' +
+    MAJORS.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+}
+
+function buildMajorChips() {
+  const row = document.getElementById('major-chips');
+  const active = document.getElementById('filter-major').value;
+  row.innerHTML = `<button class="chip ${active === '' ? 'active' : ''}" onclick="setMajorFilter('')">Tất cả</button>` +
+    MAJORS.map(m => `<button class="chip ${active === m.id ? 'active' : ''}" onclick="setMajorFilter('${m.id}')">${m.icon} ${m.name}</button>`).join('');
+}
+
+function setMajorFilter(id) {
+  document.getElementById('filter-major').value = id;
+  buildMajorChips();
+  filterJobs();
+}
+
+function syncChips() { buildMajorChips(); }
+
+/* ===== FILTER & RENDER JOBS ===== */
+function filterJobs() {
+  const q = (document.getElementById('search-input')?.value || '').toLowerCase();
+  const major = document.getElementById('filter-major')?.value || '';
+  const type = document.getElementById('filter-type')?.value || '';
+
+  let filtered = JOBS.filter(j => {
+    const mMatch = !major || j.majors.includes(major);
+    const tMatch = !type || j.type === type;
+    const qMatch = !q || (j.title + j.company).toLowerCase().includes(q);
+    return mMatch && tMatch && qMatch;
+  });
+
+  filtered.sort((a, b) => {
+    const aM = a.majors.includes(major) ? 1 : 0;
+    const bM = b.majors.includes(major) ? 1 : 0;
+    return bM - aM;
+  });
+
+  const bar = document.getElementById('count-bar');
+  if (bar) bar.textContent = `Tìm thấy ${filtered.length} vị trí${major ? ' phù hợp với ngành đã chọn' : ''}`;
+
+  const list = document.getElementById('job-list');
+  if (!list) return;
+  if (!filtered.length) {
+    list.innerHTML = `<div class="no-results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Không tìm thấy vị trí phù hợp</div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(j => renderJobCard(j, major)).join('');
+}
+
+function renderJobCard(j, activeMajor) {
+  const c = getLogoColor(j.company);
+  const majorTags = j.majors.map(mid => {
+    const m = MAJORS.find(x => x.id === mid);
+    return m ? `<span class="tag tag-major">${m.name}</span>` : '';
+  }).slice(0, 2).join('');
+  const isMatch = j.majors.includes(activeMajor || selectedMajor);
+  const matchClass = isMatch ? 'match-high' : 'match-none';
+  const matchText = isMatch ? 'Phù hợp' : 'Xem thêm';
+  const saved = savedJobs.has(j.id);
+  return `<div class="job-card" onclick="showDetail(${j.id})">
+    <div class="job-card-top">
+      <div class="company-logo" style="background:${c.bg};color:${c.text}">${j.logo}</div>
+      <div class="job-info">
+        <div class="job-title">${j.title}</div>
+        <div class="company-name">${j.company}</div>
+        <div class="tags">${majorTags}<span class="tag tag-type">${j.type}</span><span class="tag tag-count">${j.count} chỉ tiêu</span></div>
+      </div>
+    </div>
+    <div class="job-footer">
+      <span class="salary">📍 ${j.location} · ${j.salary}</span>
+      <span class="match-score ${matchClass}">${matchText}</span>
+    </div>
+  </div>`;
+}
+
+/* ===== DETAIL ===== */
+function showDetail(id) {
+  const j = JOBS.find(x => x.id === id);
+  if (!j) return;
+  currentJob = j;
+  const c = getLogoColor(j.company);
+  const saved = savedJobs.has(id);
+  const majorTags = j.majors.map(mid => {
+    const m = MAJORS.find(x => x.id === mid);
+    return m ? `<span class="tag tag-major">${m.icon} ${m.name}</span>` : '';
+  }).join('');
+  const jdItems = j.jd.map(x => `<li>${x}</li>`).join('');
+  const reqItems = j.req.map(x => `<li>${x}</li>`).join('');
+  const welfareTags = j.welfare.map(x => `<span class="welfare-tag">${x}</span>`).join('');
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-header">
+      <button class="back-btn" onclick="goBack()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7-7 7 7 7"/></svg> Quay lại
+      </button>
+      <div class="detail-logo" style="background:rgba(255,255,255,0.25)">${j.logo}</div>
+      <div class="detail-title">${j.title}</div>
+      <div class="detail-sub">${j.company} · ${j.location}</div>
+    </div>
+    <div class="detail-body">
+      <div class="info-section">
+        <h3>Thông tin tuyển dụng</h3>
+        <div class="info-grid">
+          <div class="info-item"><label>Hình thức</label><span>${j.type}</span></div>
+          <div class="info-item"><label>Chỉ tiêu</label><span>${j.count} người</span></div>
+          <div class="info-item"><label>Mức lương</label><span>${j.salary}</span></div>
+          <div class="info-item"><label>Địa điểm</label><span>${j.location}</span></div>
+        </div>
+      </div>
+      <div class="info-section">
+        <h3>Ngành phù hợp</h3>
+        <div class="tags" style="gap:6px">${majorTags}</div>
+      </div>
+      ${j.desc ? `<div class="info-section"><h3>Về công ty</h3><div class="jd-box">${j.desc}</div></div>` : ''}
+      ${jdItems ? `<div class="info-section"><h3>Mô tả công việc</h3><div class="jd-box"><ul>${jdItems}</ul></div></div>` : ''}
+      ${reqItems ? `<div class="info-section"><h3>Yêu cầu ứng viên</h3><div class="jd-box"><ul>${reqItems}</ul></div></div>` : ''}
+      ${welfareTags ? `<div class="info-section"><h3>Quyền lợi</h3><div class="welfare-tags">${welfareTags}</div></div>` : ''}
+      <div class="action-row" style="padding-bottom:1.5rem">
+        <button class="btn-save ${saved ? 'saved' : ''}" id="save-btn-${id}" onclick="toggleSave(${id})" aria-label="${saved ? 'Bỏ lưu' : 'Lưu việc làm'}">
+          ${saved ? '❤️' : '🤍'}
+        </button>
+        <button class="btn-primary" style="flex:1" onclick="openModal()">Ứng tuyển ngay</button>
+      </div>
+    </div>`;
+  showScreen('detail');
+}
+
+/* ===== SAVE ===== */
+function toggleSave(id) {
+  if (savedJobs.has(id)) savedJobs.delete(id);
+  else savedJobs.add(id);
+  const btn = document.getElementById('save-btn-' + id);
+  if (btn) {
+    const saved = savedJobs.has(id);
+    btn.className = 'btn-save' + (saved ? ' saved' : '');
+    btn.innerHTML = saved ? '❤️' : '🤍';
+  }
+  renderSaved();
+}
+
+function renderSaved() {
+  const el = document.getElementById('saved-list');
+  if (!el) return;
+  const saved = JOBS.filter(j => savedJobs.has(j.id));
+  if (!saved.length) {
+    el.innerHTML = `<div class="no-results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Chưa có việc làm nào được lưu</div>`;
+    return;
+  }
+  el.innerHTML = saved.map(j => renderJobCard(j, '')).join('');
+}
+
+/* ===== COMPANIES ===== */
+function renderCompanies(q = '') {
+  const map = new Map();
+  JOBS.forEach(j => {
+    if (!map.has(j.company)) map.set(j.company, { ...j, jobCount: 0, totalSlots: 0 });
+    const c = map.get(j.company);
+    c.jobCount++; c.totalSlots += j.count;
+  });
+  let companies = [...map.values()];
+  if (q) companies = companies.filter(c => c.company.toLowerCase().includes(q.toLowerCase()));
+  const el = document.getElementById('company-list');
+  if (!el) return;
+  el.innerHTML = companies.map(c => {
+    const col = getLogoColor(c.company);
+    return `<div class="company-card" onclick="showCompanyJobs('${c.company.replace(/'/g,"\\'")}')">
+      <div class="job-card-top">
+        <div class="company-logo" style="background:${col.bg};color:${col.text}">${c.logo}</div>
+        <div class="job-info">
+          <div class="job-title">${c.company}</div>
+          <div class="company-name company-meta">${c.desc || 'Doanh nghiệp tham gia Hội Chợ Việc Làm DUE 2026'}</div>
+          <div class="tags" style="margin-top:6px"><span class="tag tag-count">${c.jobCount} vị trí</span><span class="tag tag-type">${c.totalSlots} chỉ tiêu</span></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCompanies(q) { renderCompanies(q); }
+function showCompanyJobs(company) {
+  showScreen('jobs');
+  document.getElementById('search-input').value = company;
+  filterJobs();
+}
+
+/* ===== NAVIGATION ===== */
+function goToJobs() {
+  showScreen('jobs');
+  if (selectedMajor) {
+    document.getElementById('filter-major').value = selectedMajor;
+    syncChips();
+  }
+  filterJobs();
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + name);
+  if (el) el.classList.add('active');
+  if (name === 'jobs') { buildMajorChips(); filterJobs(); }
+  if (name === 'companies') renderCompanies();
+  if (name === 'saved') renderSaved();
+  if (name !== 'detail') prevScreen = name;
+}
+
+function goBack() { showScreen(prevScreen); }
+
+/* ===== APPLY MODAL ===== */
+function openModal() {
+  document.getElementById('modal-content').innerHTML = `
+    <h3>Ứng tuyển: ${currentJob?.title || ''}</h3>
+    <label>Họ và tên *</label>
+    <input type="text" id="apply-name" placeholder="Nguyễn Văn A">
+    <label>Email sinh viên *</label>
+    <input type="email" id="apply-email" placeholder="svXXXXXXX@due.edu.vn">
+    <label>Mã số sinh viên *</label>
+    <input type="text" id="apply-mssv" placeholder="23510XXXX">
+    <label>Ngành đang học</label>
+    <select id="apply-major">
+      <option value="">-- Chọn ngành --</option>
+      ${MAJORS.map(m => `<option value="${m.id}">${m.icon} ${m.name}</option>`).join('')}
+    </select>
+    <label>Giới thiệu ngắn</label>
+    <textarea placeholder="Mình có kinh nghiệm về..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Hủy</button>
+      <button class="btn-submit" onclick="submitApply()">Gửi hồ sơ</button>
+    </div>`;
+  document.getElementById('apply-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('apply-modal').classList.remove('open');
+}
+
+function submitApply() {
+  const name = document.getElementById('apply-name')?.value;
+  const email = document.getElementById('apply-email')?.value;
+  const mssv = document.getElementById('apply-mssv')?.value;
+  if (!name || !email || !mssv) { alert('Vui lòng điền đầy đủ thông tin bắt buộc (*)'); return; }
+  document.getElementById('modal-content').innerHTML = `
+    <div class="success-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <h3>Nộp hồ sơ thành công!</h3>
+      <p>Hồ sơ của <strong>${name}</strong> đã được gửi đến <strong>${currentJob?.company || 'doanh nghiệp'}</strong>.<br>Vui lòng theo dõi email <strong>${email}</strong> trong 3–5 ngày làm việc.</p>
+      <button class="btn-primary" style="margin-top:1.25rem" onclick="closeModal()">Đóng</button>
+    </div>`;
+}
+
+/* ===== INIT ===== */
+loadData();
+</script>
+</body>
+</html>
