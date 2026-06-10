@@ -1308,21 +1308,21 @@ function loadDarkMode() {
   }
 }
 
-// Hiệu ứng đếm số tăng dần
-function animateCountUp(element, target, duration = 1200) {
+// Hiệu ứng đếm số tăng dần (hỗ trợ suffix như "+")
+function animateCountUp(element, target, duration = 1200, suffix = '+') {
   if (!element) return;
   
   const start = 0;
-  const increment = target / (duration / 16); // ~60fps
+  const increment = target / (duration / 16);
   let current = start;
   
   const timer = setInterval(() => {
     current += increment;
     if (current >= target) {
       clearInterval(timer);
-      element.textContent = target.toLocaleString('vi-VN');
+      element.textContent = target.toLocaleString('vi-VN') + suffix;
     } else {
-      element.textContent = Math.floor(current).toLocaleString('vi-VN');
+      element.textContent = Math.floor(current).toLocaleString('vi-VN') + suffix;
     }
   }, 16);
 }
