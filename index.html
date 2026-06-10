@@ -236,13 +236,18 @@ body {
   cursor: pointer;
 }
 
-/* Dark Mode */
+/* Dark Mode - Comprehensive */
 body.dark-mode {
   --bg: #0F172A;
   --surface: #1E293B;
   --text: #F1F5F9;
   --text-secondary: #94A3B8;
   --border: #334155;
+}
+
+body.dark-mode {
+  background: var(--bg);
+  color: var(--text);
 }
 
 body.dark-mode .job-card,
@@ -254,8 +259,25 @@ body.dark-mode .chip {
   color: #F1F5F9;
 }
 
+/* Major Grid Cards in Dark Mode */
+body.dark-mode #major-grid > div {
+  background: #1E293B;
+  border-color: #334155;
+  color: #F1F5F9;
+}
+
 body.dark-mode .nav-link:hover {
   background: rgba(255,255,255,0.1);
+}
+
+/* Improve contrast for text in dark mode */
+body.dark-mode .company,
+body.dark-mode .page-subtitle {
+  color: #94A3B8;
+}
+
+body.dark-mode .job-footer {
+  border-color: #334155;
 }
 
 @media (max-width: 1024px) {
@@ -692,15 +714,15 @@ body.dark-mode .nav-link:hover {
           
           <div class="hero-stats">
             <div class="stat">
-              <strong>85+</strong>
+              <strong id="stat-companies">0</strong>
               <span>Doanh nghiệp tham gia</span>
             </div>
             <div class="stat">
-              <strong>320+</strong>
+              <strong id="stat-positions">0</strong>
               <span>Vị trí tuyển dụng</span>
             </div>
             <div class="stat">
-              <strong>1.200+</strong>
+              <strong id="stat-slots">0</strong>
               <span>Chỉ tiêu</span>
             </div>
           </div>
@@ -864,6 +886,9 @@ function initUI() {
   buildMajorChips();
   showScreen('home');
   filterJobs();
+  
+  // Cập nhật số liệu hero với hiệu ứng đếm
+  updateHeroStats();
 }
 
 function buildMajorGrid() {
@@ -1281,6 +1306,39 @@ function loadDarkMode() {
   if (localStorage.getItem('darkMode') === 'true') {
     document.body.classList.add('dark-mode');
   }
+}
+
+// Hiệu ứng đếm số tăng dần
+function animateCountUp(element, target, duration = 1200) {
+  if (!element) return;
+  
+  const start = 0;
+  const increment = target / (duration / 16); // ~60fps
+  let current = start;
+  
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      clearInterval(timer);
+      element.textContent = target.toLocaleString('vi-VN');
+    } else {
+      element.textContent = Math.floor(current).toLocaleString('vi-VN');
+    }
+  }, 16);
+}
+
+// Cập nhật số liệu thống kê với animation
+function updateHeroStats() {
+  if (!JOBS.length) return;
+
+  const uniqueCompanies = new Set(JOBS.map(j => j.company)).size;
+  const totalPositions = JOBS.length;
+  const totalSlots = JOBS.reduce((sum, j) => sum + (j.count || 0), 0);
+
+  // Animate
+  animateCountUp(document.getElementById('stat-companies'), uniqueCompanies);
+  animateCountUp(document.getElementById('stat-positions'), totalPositions);
+  animateCountUp(document.getElementById('stat-slots'), totalSlots);
 }
 
 // ==================== INIT ====================
