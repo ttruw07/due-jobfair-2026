@@ -631,12 +631,6 @@ body {
         <span>Đã lưu</span>
       </button>
     </div>
-
-    <!-- MỤC LỤC NGÀNH NGHỀ (Left Sidebar) -->
-    <div class="nav-section" style="margin-top: 20px;">
-      <div class="nav-label">Mục lục ngành nghề</div>
-      <div id="sidebar-majors" style="display: flex; flex-direction: column; gap: 2px;"></div>
-    </div>
   </aside>
 
   <!-- MAIN CONTENT -->
@@ -783,7 +777,6 @@ async function loadData() {
     JOBS = rows.map((r, i) => ({
       id: i + 1,
       company: r.company || '',
-      // logo giờ dùng để chứa URL ảnh (hoặc để trống thì tự sinh 2 chữ)
       logo: r.logo || '',
       title: r.title || '',
       majors: (r.majors || '').split('|').map(m => m.trim()).filter(Boolean),
@@ -796,7 +789,6 @@ async function loadData() {
       req: (r.req || '').split('|').map(s => s.trim()).filter(Boolean),
       welfare: (r.welfare || '').split('|').map(s => s.trim()).filter(Boolean),
       
-      // Thông tin liên hệ từ Google Sheet (nhập thủ công)
       email: r.email || '',
       phone: r.phone || '',
       website: r.website || '',
@@ -839,7 +831,6 @@ function initUI() {
   buildMajorGrid();
   buildMajorSelect();
   buildMajorChips();
-  buildSidebarMajors();
   showScreen('home');
   filterJobs();
 }
@@ -871,28 +862,6 @@ function buildMajorChips() {
     MAJORS.map(m => `<span onclick="setMajorFilter('${m.id}')" class="chip">${m.icon} ${m.name}</span>`).join('');
 }
 
-// MỚI: Xây dựng mục lục ngành nghề ở sidebar bên trái
-function buildSidebarMajors() {
-  const container = document.getElementById('sidebar-majors');
-  if (!container) return;
-
-  container.innerHTML = MAJORS.map(m => `
-    <button onclick="selectMajorFromSidebar('${m.id}')" 
-            style="display:flex; align-items:center; gap:10px; width:100%; padding:9px 12px; 
-                   background:none; border:none; border-radius:10px; color:#CBD5E1; 
-                   font-size:13.5px; text-align:left; cursor:pointer; transition:all 0.2s;">
-      <span style="font-size:16px; width:22px;">${m.icon}</span>
-      <span style="font-weight:500;">${m.name}</span>
-    </button>
-  `).join('');
-}
-
-function selectMajorFromSidebar(id) {
-  showScreen('jobs');
-  document.getElementById('filter-major').value = id;
-  filterJobs();
-}
-
 function setMajorFilter(id) {
   document.getElementById('filter-major').value = id;
   filterJobs();
@@ -902,11 +871,9 @@ function setMajorFilter(id) {
 function getLogoHTML(job, size = 56) {
   const logoValue = job.logo || '';
   
-  // Nếu cột logo chứa link ảnh (bắt đầu bằng http)
   if (logoValue.startsWith('http')) {
     return `<img src="${logoValue}" style="width:${size}px; height:${size}px; object-fit:contain; border-radius:12px; border:1px solid #E2E8F0;" alt="${job.company}">`;
   } 
-  // Nếu để trống hoặc là chữ cái → hiển thị 2 chữ cái viết tắt
   else {
     const initials = logoValue || (job.company || '??').substring(0, 2).toUpperCase();
     return `<div style="width:${size}px; height:${size}px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:${Math.floor(size*0.38)}px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${initials}</div>`;
@@ -1139,7 +1106,6 @@ function showScreen(screen) {
 
   currentScreen = screen;
 
-  // Update active nav link
   document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
   
   if (screen === 'home') {
