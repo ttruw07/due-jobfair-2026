@@ -1018,6 +1018,8 @@ function showDetail(id) {
             ${job.desc ? `<div style="margin-bottom:30px;"><h4 style="font-size:13px; color:#64748B; margin-bottom:8px; font-weight:700;">VỀ CÔNG TY</h4><p style="color:#334155; line-height:1.7;">${job.desc}</p></div>` : ''}
 
             ${job.jd.length ? `<div style="margin-bottom:30px;"><h4 style="font-size:13px; color:#64748B; margin-bottom:8px; font-weight:700;">MÔ TẢ CÔNG VIỆC</h4><ul style="padding-left:22px; color:#334155;">${job.jd.map(x => `<li style="margin-bottom:6px;">${x}</li>`).join('')}</ul></div>` : ''}
+
+            ${job.req && job.req.length ? `<div style="margin-bottom:30px;"><h4 style="font-size:13px; color:#64748B; margin-bottom:8px; font-weight:700;">YÊU CẦU ỨNG VIÊN</h4><ul style="padding-left:22px; color:#334155;">${job.req.map(x => `<li style="margin-bottom:6px;">${x}</li>`).join('')}</ul></div>` : ''}
           </div>
 
           <!-- Contact + Apply Sidebar -->
@@ -1054,15 +1056,7 @@ function showDetail(id) {
               </div>
             </div>` : ''}
 
-            <!-- Quick Apply Button -->
-            ${job.email ? `
-            <div style="margin: 20px 0 12px;">
-              <button onclick="quickApply(${job.id})" 
-                      style="width:100%; padding:14px; background: linear-gradient(to right, #F97316, #EA580C); color:white; border:none; border-radius:14px; font-weight:700; font-size:15.5px; cursor:pointer; box-shadow: 0 4px 12px rgba(249,115,22,0.3);">
-                🚀 Ứng tuyển nhanh
-              </button>
-              <div style="text-align:center; font-size:11.5px; color:#64748B; margin-top:6px;">Mở Gmail với nội dung sẵn</div>
-            </div>` : ''}
+            <!-- Nút ứng tuyển nhanh đã được bỏ theo yêu cầu -->
 
             <div style="padding-top:14px; border-top:1px solid #E2E8F0; margin-top:8px;">
               <button onclick="toggleSave(${job.id})" 
