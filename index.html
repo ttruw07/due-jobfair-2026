@@ -1,1176 +1,780 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hội Chợ Việc Làm DUE 2026 • Đại học Kinh tế - ĐH Đà Nẵng</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --primary: #1E3A8A;
-  --primary-light: #3B82F6;
-  --accent: #F97316;
-  --accent-dark: #EA580C;
-  --bg: #F1F5F9;
-  --surface: #FFFFFF;
-  --text: #0F172A;
-  --text-secondary: #475569;
-  --border: #E2E8F0;
-  --success: #16A34A;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  margin: 0;
-  line-height: 1.6;
-}
-
-/* ===== LAYOUT ===== */
-.shell {
-  display: grid;
-  grid-template-columns: 268px 1fr;
-  min-height: 100vh;
-}
-
-@media (max-width: 1024px) {
-  .shell { grid-template-columns: 1fr; }
-}
-
-/* ===== SIDEBAR (Premium Dark) ===== */
-.sidebar {
-  background: #0F172A;
-  color: #CBD5E1;
-  padding: 28px 22px;
-  position: fixed;
-  width: 268px;
-  height: 100vh;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (max-width: 1024px) {
-  .sidebar {
-    transform: translateX(-100%);
-    box-shadow: 10px 0 30px rgba(0,0,0,0.4);
-  }
-  .sidebar.open { transform: translateX(0); }
-}
-
-.sidebar-brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 36px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sidebar-brand:hover {
-  opacity: 0.85;
-}
-
-.sidebar-logo {
-  width: 52px;
-  height: 52px;
-  background: white;
-  border-radius: 14px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.sidebar-logo img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.brand-text h1 {
-  font-size: 15px;
-  font-weight: 700;
-  color: white;
-  margin: 0;
-  line-height: 1.1;
-}
-
-.brand-text span {
-  font-size: 11px;
-  color: #64748B;
-  font-weight: 500;
-}
-
-.nav-section {
-  flex: 1;
-}
-
-.nav-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #64748B;
-  padding: 0 14px 10px;
-  text-transform: uppercase;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 13px 14px;
-  border-radius: 12px;
-  color: #CBD5E1;
-  font-size: 14.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  width: 100%;
-  border: none;
-  background: none;
-  text-align: left;
-  cursor: pointer;
-  margin-bottom: 3px;
-}
-
-.nav-link:hover {
-  background: rgba(255,255,255,0.07);
-  color: white;
-}
-
-.nav-link.active {
-  background: #1E3A8A;
-  color: white;
-  font-weight: 600;
-}
-
-.nav-link svg {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
-
-.nav-badge {
-  margin-left: auto;
-  background: #F97316;
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 9px;
-  border-radius: 9999px;
-}
-
-/* ===== MAIN ===== */
-.main {
-  grid-column: 2;
-  padding: 28px 36px;
-  max-width: 1480px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-@media (max-width: 1024px) {
-  .main { grid-column: 1; padding: 20px 16px; }
-}
-
-/* ===== TOPBAR ===== */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 28px;
-}
-
-.page-title {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.6px;
-  margin: 0;
-}
-
-.page-subtitle {
-  color: #64748B;
-  margin-top: 4px;
-  font-size: 15px;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  background: white;
-  border: 1px solid #E2E8F0;
-  border-radius: 9999px;
-  padding: 10px 20px;
-  width: 340px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 14.5px;
-  padding-left: 12px;
-}
-
-.hamburger {
-  display: none;
-  width: 46px;
-  height: 46px;
-  background: white;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-@media (max-width: 1024px) {
-  .hamburger { display: flex; }
-}
-
-/* ===== HERO (Premium) ===== */
-.hero {
-  background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
-  border-radius: 28px;
-  padding: 48px 52px;
-  color: white;
-  margin-bottom: 36px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -40%;
-  right: -15%;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle, rgba(249,115,22,0.18) 0%, transparent 70%);
-  border-radius: 50%;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 620px;
-}
-
-.hero h1 {
-  font-size: 38px;
-  font-weight: 800;
-  line-height: 1.05;
-  margin: 0 0 16px;
-  letter-spacing: -1.2px;
-}
-
-.hero h1 span {
-  color: #FED7AA;
-}
-
-.hero p {
-  font-size: 16.5px;
-  opacity: 0.92;
-  max-width: 460px;
-  margin-bottom: 28px;
-}
-
-.hero-stats {
-  display: flex;
-  gap: 32px;
-}
-
-.stat {
-  text-align: left;
-}
-
-.stat strong {
-  display: block;
-  font-size: 30px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.stat span {
-  font-size: 13px;
-  opacity: 0.75;
-  font-weight: 500;
-}
-
-/* ===== FILTERS ===== */
-.filters {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 18px;
-}
-
-.filter-select {
-  padding: 11px 18px;
-  border: 1px solid #CBD5E1;
-  border-radius: 14px;
-  background: white;
-  font-size: 14px;
-  font-weight: 500;
-  min-width: 190px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-.chip-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-.chip {
-  padding: 9px 18px;
-  background: white;
-  border: 1px solid #CBD5E1;
-  border-radius: 9999px;
-  font-size: 13.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.chip.active {
-  background: #1E3A8A;
-  color: white;
-  border-color: #1E3A8A;
-}
-
-.chip:hover:not(.active) {
-  border-color: #94A3B8;
-}
-
-/* ===== JOB GRID ===== */
-.job-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 20px;
-}
-
-@media (max-width: 640px) {
-  .job-grid { grid-template-columns: 1fr; }
-}
-
-.job-card {
-  background: white;
-  border: 1px solid #E2E8F0;
-  border-radius: 22px;
-  padding: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  cursor: pointer;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.08);
-}
-
-.job-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  border-color: #CBD5E1;
-}
-
-.job-header {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 18px;
-}
-
-.company-logo {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 19px;
-  flex-shrink: 0;
-  border: 1px solid #F1E7FF;
-  background: #F8FAFC;
-}
-
-.job-info h3 {
-  margin: 0 0 5px;
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-.job-info .company {
-  color: #64748B;
-  font-size: 14.5px;
-  font-weight: 500;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin: 16px 0;
-}
-
-.tag {
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 5px 13px;
-  border-radius: 9999px;
-}
-
-.tag-major { background: #DBEAFE; color: #1E40AF; }
-.tag-type { background: #DCFCE7; color: #166534; }
-.tag-count { background: #F3E8FF; color: #6B21A8; }
-
-.job-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 18px;
-  border-top: 1px solid #F1E7FF;
-  font-size: 13.5px;
-}
-
-/* ===== BUTTONS ===== */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px 26px;
-  border-radius: 14px;
-  font-weight: 700;
-  font-size: 14.5px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  text-decoration: none;
-}
-
-.btn-primary {
-  background: linear-gradient(to right, #F97316, #EA580C);
-  color: white;
-  box-shadow: 0 6px 16px rgba(249, 115, 22, 0.35);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(249, 115, 22, 0.4);
-}
-
-/* ===== DETAIL ===== */
-.detail-container {
-  max-width: 1150px;
-  margin: 0 auto;
-}
-
-.detail-header {
-  background: linear-gradient(135deg, #1E3A8A, #1E40AF);
-  color: white;
-  padding: 36px;
-  border-radius: 28px 28px 0 0;
-}
-
-.detail-body {
-  background: white;
-  padding: 36px;
-  border-radius: 0 0 28px 28px;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-}
-
-/* ===== RESPONSIVE - MOBILE OPTIMIZATION ===== */
-@media (max-width: 1024px) {
-  .main {
-    padding: 20px 16px;
-  }
-  
-  .topbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  
-  .search-box {
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 260px;
-  }
-  
-  .hero {
-    padding: 32px 24px;
-    border-radius: 20px;
-  }
-  
-  .hero h1 {
-    font-size: 28px;
-    line-height: 1.15;
-  }
-  
-  .hero-stats {
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .stat strong {
-    font-size: 26px;
-  }
-  
-  .job-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  .job-card {
-    padding: 20px;
-  }
-  
-  .detail-header {
-    padding: 24px 20px;
-    border-radius: 20px 20px 0 0;
-  }
-  
-  .detail-body {
-    padding: 24px 20px;
-    border-radius: 0 0 20px 20px;
-  }
-  
-  /* Make detail content stack on mobile */
-  .detail-body > div {
-    grid-template-columns: 1fr !important;
-    gap: 24px !important;
-  }
-  
-  .filters {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .filter-select {
-    width: 100%;
-    min-width: auto;
-  }
-  
-  .chip-container {
-    margin-bottom: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .page-title {
-    font-size: 24px;
-  }
-  
-  .hero h1 {
-    font-size: 24px;
-  }
-  
-  .company-logo {
-    width: 48px;
-    height: 48px;
-    font-size: 17px;
-  }
-}
-</style>
-</head>
-<body>
-<div class="shell">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand" onclick="showScreen('home')">
-      <div class="sidebar-logo">
-        <img src="https://i.ibb.co/WNqZgFSt/Logo-DUE-1.png" 
-             alt="Logo DUE" style="max-width: 44px; max-height: 44px;">
-      </div>
-      <div class="brand-text">
-        <h1>Trường Đại học Kinh tế</h1>
-        <span>Đại học Đà Nẵng</span>
-      </div>
-    </div>
-
-    <div class="nav-section">
-      <div class="nav-label">Menu chính</div>
-      
-      <button class="nav-link active" onclick="showScreen('home')">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1v-5m0 0h4m-4 0v5m0-5h4m6 0a1 1 0 01-1-1v-5m0 0l-7 7-7-7" /></svg>
-        <span>Tổng quan</span>
-      </button>
-      
-      <button class="nav-link" onclick="showScreen('jobs')" id="nav-jobs">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-        <span>Việc làm</span>
-        <span class="nav-badge" id="nav-jobs-count">124</span>
-      </button>
-      
-      <button class="nav-link" onclick="showScreen('companies')">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 01-2-2H7a2 2 0 01-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-        <span>Doanh nghiệp</span>
-      </button>
-      
-      <button class="nav-link" onclick="showScreen('saved')">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2 3 3 0 003 3 3 3 0 003-3 2 2 0 012 2v0a2 2 0 01-2 2H7a2 2 0 01-2-2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8" /></svg>
-        <span>Đã lưu</span>
-      </button>
-    </div>
-
-    <!-- MỤC LỤC NGÀNH NGHỀ (Left Sidebar) -->
-    <div class="nav-section" style="margin-top: 20px;">
-      <div class="nav-label">Mục lục ngành nghề</div>
-      <div id="sidebar-majors" style="display: flex; flex-direction: column; gap: 2px;"></div>
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <main class="main">
-
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div>
-        <h2 class="page-title" id="page-title">Tổng quan</h2>
-        <p class="page-subtitle" id="page-subtitle">Chọn ngành để xem cơ hội việc làm phù hợp nhất</p>
-      </div>
-
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <div class="search-box">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#64748B"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          <input type="text" id="search-input" placeholder="Tìm vị trí hoặc công ty..." oninput="filterJobs()">
-        </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hội Chợ Việc Làm DUE 2026 • Trường Đại học Kinh tế - Đại học Đà Nẵng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Poppins:wght@600;700&amp;display=swap');
         
-        <button class="hamburger" onclick="toggleSidebar()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M4 6h16M4 12h16M4 18h16" /></svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- HOME SCREEN -->
-    <div id="screen-home" class="screen">
-      <!-- Hero Banner -->
-      <div class="hero">
-        <div class="hero-content">
-          <h1>Chào mừng đến với<br><span>Hội Chợ Việc Làm DUE 2026</span></h1>
-          <p>Kết nối sinh viên Đại học Kinh tế Đà Nẵng với hơn 80+ doanh nghiệp uy tín. Tìm kiếm cơ hội thực tập và việc làm chất lượng cao ngay hôm nay.</p>
-          
-          <div class="hero-stats">
-            <div class="stat">
-              <strong>85+</strong>
-              <span>Doanh nghiệp tham gia</span>
-            </div>
-            <div class="stat">
-              <strong>320+</strong>
-              <span>Vị trí tuyển dụng</span>
-            </div>
-            <div class="stat">
-              <strong>1.200+</strong>
-              <span>Chỉ tiêu</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Majors -->
-      <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <h3 style="margin:0; font-size:19px; font-weight:700;">Chọn ngành của bạn</h3>
-          <p style="margin:4px 0 0; color:#64748B;">Chúng tôi sẽ ưu tiên hiển thị việc làm phù hợp nhất</p>
-        </div>
-        <button onclick="showScreen('jobs')" class="btn btn-primary" style="padding:11px 22px; font-size:14px;">
-          Xem tất cả việc làm →
-        </button>
-      </div>
-
-      <div id="major-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px;"></div>
-    </div>
-
-    <!-- JOBS SCREEN -->
-    <div id="screen-jobs" class="screen" style="display:none;">
-      <div class="filters">
-        <select id="filter-major" class="filter-select" onchange="filterJobs()">
-          <option value="">Tất cả ngành</option>
-        </select>
-        <select id="filter-type" class="filter-select" onchange="filterJobs()">
-          <option value="">Tất cả hình thức</option>
-          <option>Toàn thời gian</option>
-          <option>Bán thời gian</option>
-          <option>Thực tập</option>
-        </select>
-        <div style="margin-left:auto; font-weight:700; color:#475569; font-size:15px;" id="count-bar"></div>
-      </div>
-
-      <div class="chip-container" id="major-chips"></div>
-      <div class="job-grid" id="job-list"></div>
-    </div>
-
-    <!-- DETAIL SCREEN -->
-    <div id="screen-detail" class="screen" style="display:none;">
-      <div id="detail-content"></div>
-    </div>
-
-    <!-- COMPANIES -->
-    <div id="screen-companies" class="screen" style="display:none;">
-      <div style="margin-bottom:22px;">
-        <input type="text" placeholder="Tìm kiếm doanh nghiệp..." class="filter-select" style="width:100%; max-width:400px;" oninput="filterCompanies(this.value)">
-      </div>
-      <div class="job-grid" id="company-list"></div>
-    </div>
-
-    <!-- SAVED -->
-    <div id="screen-saved" class="screen" style="display:none;">
-      <h3 style="margin-bottom:20px; font-size:20px;">Việc làm đã lưu</h3>
-      <div class="job-grid" id="saved-list"></div>
-    </div>
-
-  </main>
-</div>
-
-<script>
-// ==================== CONFIG ====================
-// Sheet ID mới: 1RIP1xE02orm56CsyxYL2To_NO4ZjE9PkrgQdXjsXTiw
-
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT25DlAHBhi-VuKvGlJOP_WhjtMw-lPF-Syuz7_udrEWw10z0Q8kMS2Y2wbZf4k-n7eYx1zMTqTG-Js/pub?gid=210076867&single=true&output=csv";
-
-const MAJORS = [
-  {id:'ke-toan', name:'Kế toán', icon:'💰'},
-  {id:'kiem-toan', name:'Kiểm toán', icon:'🔍'},
-  {id:'tai-chinh', name:'Tài chính - Ngân hàng', icon:'🏦'},
-  {id:'cong-nghe-tc', name:'Công nghệ tài chính', icon:'💳'},
-  {id:'quan-tri', name:'Quản trị kinh doanh', icon:'📊'},
-  {id:'quan-tri-ks', name:'Quản trị khách sạn', icon:'🏨'},
-  {id:'quan-tri-dl', name:'Quản trị dịch vụ du lịch', icon:'✈️'},
-  {id:'quan-tri-nl', name:'Quản trị nhân lực', icon:'👥'},
-  {id:'kinh-te', name:'Kinh tế', icon:'📈'},
-  {id:'thong-ke', name:'Thống kê kinh tế', icon:'📉'},
-  {id:'khoa-hoc-dl', name:'Khoa học dữ liệu', icon:'📊'},
-  {id:'marketing', name:'Marketing', icon:'📣'},
-  {id:'thuong-mai', name:'Thương mại điện tử', icon:'🛒'},
-  {id:'kinh-doanh-tm', name:'Kinh doanh thương mại', icon:'🏪'},
-  {id:'kinh-doanh-qt', name:'Kinh doanh quốc tế', icon:'🌏'},
-  {id:'cntt', name:'Hệ thống thông tin', icon:'💻'},
-  {id:'luat', name:'Luật', icon:'⚖️'},
-  {id:'luat-kt', name:'Luật kinh tế', icon:'📜'},
-  {id:'quan-ly-nn', name:'Quản lý nhà nước', icon:'🏛️'},
-];
-
-let JOBS = [];
-let savedJobs = new Set();
-let currentScreen = 'home';
-
-// ==================== DATA ====================
-async function loadData() {
-  try {
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
-    const rows = parseCSV(text);
-    
-    JOBS = rows.map((r, i) => ({
-      id: i + 1,
-      company: r.company || '',
-      // logo giờ dùng để chứa URL ảnh (hoặc để trống thì tự sinh 2 chữ)
-      logo: r.logo || '',
-      title: r.title || '',
-      majors: (r.majors || '').split('|').map(m => m.trim()).filter(Boolean),
-      type: r.type || 'Toàn thời gian',
-      count: parseInt(r.count) || 1,
-      salary: r.salary || 'Thỏa thuận',
-      location: r.location || 'Đà Nẵng',
-      desc: r.desc || '',
-      jd: (r.jd || '').split('|').map(s => s.trim()).filter(Boolean),
-      req: (r.req || '').split('|').map(s => s.trim()).filter(Boolean),
-      welfare: (r.welfare || '').split('|').map(s => s.trim()).filter(Boolean),
-      
-      // Thông tin liên hệ từ Google Sheet (nhập thủ công)
-      email: r.email || '',
-      phone: r.phone || '',
-      website: r.website || '',
-    }));
-    
-    initUI();
-  } catch (e) {
-    document.getElementById('screen-home').innerHTML = `<div style="padding:50px; background:white; border-radius:20px; text-align:center; color:#DC2626;">Không thể tải dữ liệu. Vui lòng kiểm tra kết nối hoặc SHEET_URL.</div>`;
-  }
-}
-
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  if (lines.length < 2) return [];
-  const headers = parseCSVRow(lines[0]);
-  return lines.slice(1).map(line => {
-    const values = parseCSVRow(line);
-    const obj = {};
-    headers.forEach((h, i) => obj[h.trim()] = values[i] ? values[i].trim() : '');
-    return obj;
-  }).filter(r => r.company);
-}
-
-function parseCSVRow(line) {
-  const result = [];
-  let cur = '', inQuote = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
-    if (c === '"') { if (inQuote && line[i+1] === '"') { cur += '"'; i++; } else inQuote = !inQuote; }
-    else if (c === ',' && !inQuote) { result.push(cur); cur = ''; }
-    else cur += c;
-  }
-  result.push(cur);
-  return result;
-}
-
-// ==================== UI ====================
-function initUI() {
-  document.getElementById('nav-jobs-count').textContent = JOBS.length;
-  buildMajorGrid();
-  buildMajorSelect();
-  buildMajorChips();
-  buildSidebarMajors();
-  showScreen('home');
-  filterJobs();
-}
-
-function buildMajorGrid() {
-  const container = document.getElementById('major-grid');
-  container.innerHTML = MAJORS.map(m => `
-    <div onclick="selectMajor('${m.id}')" style="background:white; border:1px solid #E2E8F0; border-radius:18px; padding:20px 16px; text-align:center; cursor:pointer; transition:all 0.2s;">
-      <div style="font-size:30px; margin-bottom:10px;">${m.icon}</div>
-      <div style="font-weight:700; font-size:14.5px;">${m.name}</div>
-    </div>
-  `).join('');
-}
-
-function selectMajor(id) {
-  showScreen('jobs');
-  document.getElementById('filter-major').value = id;
-  filterJobs();
-}
-
-function buildMajorSelect() {
-  const sel = document.getElementById('filter-major');
-  sel.innerHTML = '<option value="">Tất cả ngành</option>' + MAJORS.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
-}
-
-function buildMajorChips() {
-  const container = document.getElementById('major-chips');
-  container.innerHTML = `<span onclick="setMajorFilter('')" class="chip active">Tất cả</span>` +
-    MAJORS.map(m => `<span onclick="setMajorFilter('${m.id}')" class="chip">${m.icon} ${m.name}</span>`).join('');
-}
-
-// MỚI: Xây dựng mục lục ngành nghề ở sidebar bên trái
-function buildSidebarMajors() {
-  const container = document.getElementById('sidebar-majors');
-  if (!container) return;
-
-  container.innerHTML = MAJORS.map(m => `
-    <button onclick="selectMajorFromSidebar('${m.id}')" 
-            style="display:flex; align-items:center; gap:10px; width:100%; padding:9px 12px; 
-                   background:none; border:none; border-radius:10px; color:#CBD5E1; 
-                   font-size:13.5px; text-align:left; cursor:pointer; transition:all 0.2s;">
-      <span style="font-size:16px; width:22px;">${m.icon}</span>
-      <span style="font-weight:500;">${m.name}</span>
-    </button>
-  `).join('');
-}
-
-function selectMajorFromSidebar(id) {
-  showScreen('jobs');
-  document.getElementById('filter-major').value = id;
-  filterJobs();
-}
-
-function setMajorFilter(id) {
-  document.getElementById('filter-major').value = id;
-  filterJobs();
-}
-
-// Helper: Render logo (ảnh hoặc chữ cái)
-function getLogoHTML(job, size = 56) {
-  const logoValue = job.logo || '';
-  
-  // Nếu cột logo chứa link ảnh (bắt đầu bằng http)
-  if (logoValue.startsWith('http')) {
-    return `<img src="${logoValue}" style="width:${size}px; height:${size}px; object-fit:contain; border-radius:12px; border:1px solid #E2E8F0;" alt="${job.company}">`;
-  } 
-  // Nếu để trống hoặc là chữ cái → hiển thị 2 chữ cái viết tắt
-  else {
-    const initials = logoValue || (job.company || '??').substring(0, 2).toUpperCase();
-    return `<div style="width:${size}px; height:${size}px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:${Math.floor(size*0.38)}px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${initials}</div>`;
-  }
-}
-
-// ==================== JOBS ====================
-function filterJobs() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const major = document.getElementById('filter-major').value;
-  const type = document.getElementById('filter-type').value;
-
-  let filtered = JOBS.filter(j => {
-    const matchMajor = !major || j.majors.includes(major);
-    const matchType = !type || j.type === type;
-    const matchQuery = !q || (j.title + j.company + j.location).toLowerCase().includes(q);
-    return matchMajor && matchType && matchQuery;
-  });
-
-  document.getElementById('count-bar').textContent = `${filtered.length} vị trí`;
-
-  const container = document.getElementById('job-list');
-  if (!filtered.length) {
-    container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px 20px; color:#64748B;">Không tìm thấy vị trí phù hợp.</div>`;
-    return;
-  }
-
-  container.innerHTML = filtered.map(job => `
-    <div class="job-card" onclick="showDetail(${job.id})">
-      <div class="job-header">
-        ${getLogoHTML(job, 56)}
-        <div class="job-info">
-          <h3>${job.title}</h3>
-          <div class="company">${job.company}</div>
-        </div>
-      </div>
-      <div class="tags">
-        ${job.majors.slice(0,2).map(mid => {
-          const m = MAJORS.find(x => x.id === mid);
-          return m ? `<span class="tag tag-major">${m.name}</span>` : '';
-        }).join('')}
-        <span class="tag tag-type">${job.type}</span>
-        <span class="tag tag-count">${job.count} chỉ tiêu</span>
-      </div>
-      <div class="job-footer">
-        <div style="color:#64748B;">📍 ${job.location} • ${job.salary}</div>
-        <div style="font-size:12.5px; font-weight:700; padding:5px 13px; border-radius:9999px; background:${job.majors.includes(major) ? '#DCFCE7' : '#F1F5F9'}; color:${job.majors.includes(major) ? '#166534' : '#64748B'};">
-          ${job.majors.includes(major) ? '✓ Phù hợp' : 'Chi tiết'}
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ==================== DETAIL ====================
-function showDetail(id) {
-  const job = JOBS.find(j => j.id === id);
-  if (!job) return;
-
-  const html = `
-    <div class="detail-container">
-      <div class="detail-header">
-        <button onclick="goBack()" style="background:rgba(255,255,255,0.2); color:white; border:none; padding:9px 18px; border-radius:9999px; margin-bottom:24px; cursor:pointer; font-weight:600;">← Quay lại danh sách</button>
-        
-        <div style="display:flex; gap:18px; align-items:center;">
-          ${getLogoHTML(job, 68)}
-          <div>
-            <h2 style="margin:0; font-size:26px; font-weight:800;">${job.title}</h2>
-            <p style="margin:6px 0 0; opacity:0.85; font-size:15.5px;">${job.company} • ${job.location}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="detail-body">
-        <div style="display:grid; grid-template-columns:1fr 400px; gap:36px;">
-          <div>
-            <div style="margin-bottom:30px;">
-              <h4 style="font-size:13px; color:#64748B; margin-bottom:10px; font-weight:700;">THÔNG TIN TUYỂN DỤNG</h4>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; font-size:15px;">
-                <div><strong>Hình thức:</strong> ${job.type}</div>
-                <div><strong>Chỉ tiêu:</strong> ${job.count} người</div>
-                <div><strong>Mức lương:</strong> ${job.salary}</div>
-                <div><strong>Địa điểm:</strong> ${job.location}</div>
-              </div>
-            </div>
-
-            ${job.desc ? `<div style="margin-bottom:30px;"><h4 style="font-size:13px; color:#64748B; margin-bottom:8px; font-weight:700;">VỀ CÔNG TY</h4><p style="color:#334155; line-height:1.7;">${job.desc}</p></div>` : ''}
-
-            ${job.jd.length ? `<div style="margin-bottom:30px;"><h4 style="font-size:13px; color:#64748B; margin-bottom:8px; font-weight:700;">MÔ TẢ CÔNG VIỆC</h4><ul style="padding-left:22px; color:#334155;">${job.jd.map(x => `<li style="margin-bottom:6px;">${x}</li>`).join('')}</ul></div>` : ''}
-          </div>
-
-          <!-- Contact Information -->
-          <div style="background:#F8FAFC; border-radius:22px; padding:26px; position:sticky; top:20px; height:fit-content;">
-            <h3 style="margin-top:0; margin-bottom:16px;">Thông tin liên hệ</h3>
-            
-            <div style="margin-bottom:14px;">
-              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Email tuyển dụng</div>
-              <div style="font-size:15px; font-weight:600;">
-                ${job.email ? `<a href="mailto:${job.email}" style="color:#1E40AF; text-decoration:none;">${job.email}</a>` : 'Chưa có thông tin'}
-              </div>
-            </div>
-            
-            <div style="margin-bottom:14px;">
-              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Số điện thoại</div>
-              <div style="font-size:15px; font-weight:600;">
-                ${job.phone ? job.phone : 'Chưa có thông tin'}
-              </div>
-            </div>
-            
-            <div style="margin-bottom:18px;">
-              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Website</div>
-              <div style="font-size:15px; font-weight:600;">
-                ${job.website 
-                  ? `<a href="${job.website.startsWith('http') ? job.website : 'https://' + job.website}" target="_blank" style="color:#1E40AF; text-decoration:none;">${job.website}</a>` 
-                  : 'Chưa có thông tin'}
-              </div>
-            </div>
-
-            <div style="padding-top:16px; border-top:1px solid #E2E8F0;">
-              <button onclick="toggleSave(${job.id})" style="width:100%; padding:12px; background:white; border:1px solid #CBD5E1; border-radius:14px; font-weight:700; font-size:14.5px;">
-                ${savedJobs.has(job.id) ? '❤️ Đã lưu' : '🤍 Lưu việc làm'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('detail-content').innerHTML = html;
-  showScreen('detail');
-}
-
-function submitApplication() {
-  const name = document.getElementById('apply-name').value.trim();
-  if (!name) {
-    alert("Vui lòng nhập họ và tên!");
-    return;
-  }
-  alert(`Cảm ơn ${name}! Hồ sơ của bạn đã được gửi thành công đến nhà tuyển dụng.`);
-  showScreen('jobs');
-}
-
-// ==================== SAVE ====================
-function toggleSave(id) {
-  if (savedJobs.has(id)) savedJobs.delete(id);
-  else savedJobs.add(id);
-  
-  if (currentScreen === 'detail') showDetail(id);
-  else if (currentScreen === 'saved') renderSaved();
-}
-
-function renderSaved() {
-  const container = document.getElementById('saved-list');
-  const saved = JOBS.filter(j => savedJobs.has(j.id));
-  
-  if (!saved.length) {
-    container.innerHTML = `<div style="grid-column:1/-1; padding:60px 20px; text-align:center; color:#64748B;">Bạn chưa lưu việc làm nào.</div>`;
-    return;
-  }
-  container.innerHTML = saved.map(job => `
-    <div class="job-card" onclick="showDetail(${job.id})">
-      <div class="job-header">
-        ${getLogoHTML(job, 56)}
-        <div class="job-info">
-          <h3>${job.title}</h3>
-          <div class="company">${job.company}</div>
-        </div>
-      </div>
-      <div class="job-footer">
-        <div>${job.location} • ${job.salary}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ==================== COMPANIES ====================
-function filterCompanies(query = '') {
-  const container = document.getElementById('company-list');
-  const map = new Map();
-  
-  JOBS.forEach(j => {
-    if (!map.has(j.company)) map.set(j.company, {company: j.company, logo: j.logo, count: 0, slots: 0});
-    const c = map.get(j.company);
-    c.count++; c.slots += j.count;
-  });
-
-  let companies = Array.from(map.values());
-  if (query) companies = companies.filter(c => c.company.toLowerCase().includes(query.toLowerCase()));
-
-  container.innerHTML = companies.map(c => `
-    <div class="job-card" onclick="showCompanyJobs('${c.company}')">
-      <div class="job-header">
-        ${c.logo && c.logo.startsWith('http') 
-          ? `<img src="${c.logo}" style="width:56px; height:56px; object-fit:contain; border-radius:12px; border:1px solid #E2E8F0;" alt="${c.company}">`
-          : `<div style="width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:19px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${c.logo || c.company.substring(0,2).toUpperCase()}</div>`
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
         }
-        <div class="job-info">
-          <h3>${c.company}</h3>
-          <div class="company">${c.count} vị trí • ${c.slots} chỉ tiêu</div>
+        
+        .font-display {
+            font-family: 'Poppins', system-ui, sans-serif;
+        }
+
+        .section-header {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -.025em;
+        }
+
+        .job-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .job-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .nav-link {
+            transition: all 0.2s ease;
+        }
+        
+        .nav-link.active {
+            background-color: #1E3A8A;
+            color: white;
+            border-radius: 0.75rem;
+        }
+
+        .modern-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .modern-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .due-gradient {
+            background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+        }
+
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Dark mode enhancements */
+        .dark .job-card {
+            background-color: #1e2937;
+            border-color: #334155;
+        }
+        
+        .dark .nav-link.active {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+    <script>
+        // Tailwind Dark Mode Configuration
+        function initTailwind() {
+            document.documentElement.style.setProperty('--accent', '#ea580c');
+        }
+        
+        // Dark Mode Toggle
+        function initDarkMode() {
+            const html = document.documentElement;
+            const toggleBtn = document.getElementById('dark-toggle');
+            
+            // Load saved preference
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+            }
+            
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    html.classList.toggle('dark');
+                    const isDark = html.classList.contains('dark');
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    
+                    // Update icon
+                    const icon = toggleBtn.querySelector('i');
+                    if (icon) {
+                        icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                    }
+                });
+            }
+        }
+        
+        // Initialize everything
+        function initializeApp() {
+            initTailwind();
+            initDarkMode();
+        }
+        
+        // Auto init when DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+    </script>
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar (Desktop) -->
+        <div class="w-72 bg-slate-900 text-white flex-shrink-0 hidden lg:flex flex-col">
+            <div class="p-6">
+                <!-- Logo & School Name -->
+                <div class="flex items-center gap-x-3 mb-8">
+                    <div class="w-11 h-11 bg-white rounded-2xl p-1.5 flex items-center justify-center shadow-inner flex-shrink-0">
+                        <!-- 
+                            === HƯỚNG DẪN THAY LOGO DUE MỚI ===
+                            1. Vào Google Drive: https://drive.google.com/drive/folders/1iIp7gp0BR9yzftRZ4DMz-v6qeRLTh4t_
+                            2. Tải file "Logo DUE-1.png" hoặc "Logo DUE-2.png" (logo mới đẹp nhất)
+                            3. Đặt file vào cùng thư mục với HTML này
+                            4. Thay dòng src bên dưới thành: src="Logo DUE-1.png"
+                        -->
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Logo_Kinh_t%E1%BA%BF_%C4%90%C3%A0_N%E1%BA%B5ng.jpg/200px-Logo_Kinh_t%E1%BA%BF_%C4%90%C3%A0_N%E1%BA%B5ng.jpg" 
+                             class="w-full h-full object-contain" alt="Logo DUE">
+                    </div>
+                    <div>
+                        <div class="font-bold text-xl tracking-tight">Trường Đại học Kinh tế</div>
+                        <div class="text-xs text-slate-400 -mt-0.5">Đại học Đà Nẵng</div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="space-y-1 text-sm">
+                    <div onclick="showScreen('home')" class="nav-link active flex items-center gap-x-3 px-4 py-3 font-medium cursor-pointer rounded-2xl" id="nav-home">
+                        <i class="fa-solid fa-home w-5"></i>
+                        <span>Tổng quan</span>
+                    </div>
+                    <div onclick="showScreen('jobs')" class="nav-link flex items-center gap-x-3 px-4 py-3 font-medium cursor-pointer hover:bg-slate-800 rounded-2xl" id="nav-jobs">
+                        <i class="fa-solid fa-briefcase w-5"></i>
+                        <span>Việc làm</span>
+                        <span class="ml-auto bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full" id="nav-jobs-count">124</span>
+                    </div>
+                    <div onclick="showScreen('companies')" class="nav-link flex items-center gap-x-3 px-4 py-3 font-medium cursor-pointer hover:bg-slate-800 rounded-2xl" id="nav-companies">
+                        <i class="fa-solid fa-building w-5"></i>
+                        <span>Doanh nghiệp</span>
+                    </div>
+                    <div onclick="showScreen('saved')" class="nav-link flex items-center gap-x-3 px-4 py-3 font-medium cursor-pointer hover:bg-slate-800 rounded-2xl" id="nav-saved">
+                        <i class="fa-solid fa-bookmark w-5"></i>
+                        <span>Đã lưu</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-auto p-6 border-t border-slate-800 text-xs text-slate-500">
+                Hội Chợ Việc Làm DUE 2026<br>
+                <span class="text-emerald-400">12 – 13/03/2026</span>
+            </div>
         </div>
-      </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col min-w-0">
+            
+            <!-- Topbar -->
+            <div class="bg-white dark:bg-slate-900 border-b dark:border-slate-800 px-6 py-4 sticky top-0 z-40 flex items-center justify-between">
+                <div class="flex items-center gap-x-4">
+                    <div class="lg:hidden">
+                        <button onclick="toggleMobileNav()" class="w-10 h-10 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl">
+                            <i class="fa-solid fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <h1 id="page-title" class="text-2xl font-semibold tracking-tight">Tổng quan</h1>
+                        <p id="page-subtitle" class="text-sm text-slate-500 dark:text-slate-400">Chọn ngành để khám phá cơ hội phù hợp</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-x-3">
+                    <!-- Search -->
+                    <div class="relative w-72 hidden md:block">
+                        <i class="fa-solid fa-search absolute left-4 top-3 text-slate-400"></i>
+                        <input id="global-search" type="text" placeholder="Tìm việc làm hoặc công ty..." 
+                               oninput="handleGlobalSearch()"
+                               class="w-full bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-slate-300 dark:focus:border-slate-600 pl-11 py-2.5 rounded-3xl text-sm outline-none dark:text-white">
+                    </div>
+
+                    <!-- Dark Mode Toggle -->
+                    <button id="dark-toggle" 
+                            class="w-10 h-10 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-colors"
+                            title="Chuyển chế độ sáng/tối">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="flex-1 p-6 lg:p-8 overflow-auto" id="main-content">
+                
+                <!-- HOME SCREEN -->
+                <div id="screen-home">
+                    <!-- Hero -->
+                    <div class="due-gradient rounded-3xl p-8 lg:p-10 text-white mb-8 relative overflow-hidden">
+                        <div class="max-w-lg relative z-10">
+                            <div class="inline-flex items-center gap-x-2 bg-white/20 px-4 py-1 rounded-full text-sm mb-4">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                <span>12 – 13 Tháng 3, 2026</span>
+                            </div>
+                            
+                            <h2 class="text-4xl lg:text-5xl font-bold tracking-tighter leading-none mb-3">
+                                Hội Chợ Việc Làm<br>
+                                <span class="text-orange-300">DUE 2026</span>
+                            </h2>
+                            <p class="text-white/90 text-lg mb-6">Kết nối với hơn 85 doanh nghiệp hàng đầu. Tìm cơ hội thực tập và việc làm chất lượng cao.</p>
+                            
+                            <div class="flex flex-wrap gap-x-3 gap-y-2">
+                                <button onclick="showScreen('jobs')" 
+                                        class="px-6 py-3 bg-white text-slate-900 font-semibold rounded-2xl flex items-center gap-x-2 hover:bg-orange-50 transition-colors">
+                                    <span>Khám phá việc làm</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                                <button onclick="showScreen('companies')" 
+                                        class="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/30 rounded-2xl font-medium transition-colors">
+                                    Xem doanh nghiệp
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border dark:border-slate-800">
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="text-3xl font-semibold">85+</div>
+                                    <div class="text-sm text-slate-500 dark:text-slate-400">Doanh nghiệp</div>
+                                </div>
+                                <i class="fa-solid fa-building text-3xl text-blue-200 dark:text-blue-900"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border dark:border-slate-800">
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="text-3xl font-semibold">320+</div>
+                                    <div class="text-sm text-slate-500 dark:text-slate-400">Vị trí tuyển dụng</div>
+                                </div>
+                                <i class="fa-solid fa-briefcase text-3xl text-emerald-200 dark:text-emerald-900"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border dark:border-slate-800">
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="text-3xl font-semibold">1.200+</div>
+                                    <div class="text-sm text-slate-500 dark:text-slate-400">Chỉ tiêu</div>
+                                </div>
+                                <i class="fa-solid fa-users text-3xl text-orange-200 dark:text-orange-900"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 border dark:border-slate-800">
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="text-3xl font-semibold text-emerald-600">92%</div>
+                                    <div class="text-sm text-slate-500 dark:text-slate-400">Tỷ lệ có việc</div>
+                                </div>
+                                <i class="fa-solid fa-chart-line text-3xl text-emerald-200 dark:text-emerald-900"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chọn ngành -->
+                    <div class="mb-8">
+                        <div class="flex items-end justify-between mb-4">
+                            <div>
+                                <h3 class="section-header">Chọn ngành của bạn</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400">Chúng tôi sẽ gợi ý việc làm phù hợp nhất</p>
+                            </div>
+                            <button onclick="showScreen('jobs')" class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-x-1">
+                                Xem tất cả <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="major-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+
+                    <!-- Recommended -->
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="section-header">Việc làm phù hợp với bạn</h3>
+                            <button onclick="showScreen('jobs')" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Xem tất cả →</button>
+                        </div>
+                        <div id="recommended-jobs" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- JS populated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOBS SCREEN -->
+                <div id="screen-jobs" class="hidden">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-y-4 mb-6">
+                        <div>
+                            <h2 class="text-2xl font-semibold">Tất cả việc làm</h2>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Lọc theo ngành và hình thức làm việc</p>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-3">
+                            <select id="filter-major" onchange="filterJobs()" class="bg-white dark:bg-slate-900 border dark:border-slate-700 text-sm rounded-2xl px-4 py-2.5 focus:outline-none">
+                                <option value="">Tất cả ngành</option>
+                            </select>
+                            
+                            <select id="filter-type" onchange="filterJobs()" class="bg-white dark:bg-slate-900 border dark:border-slate-700 text-sm rounded-2xl px-4 py-2.5 focus:outline-none">
+                                <option value="">Tất cả hình thức</option>
+                                <option value="Toàn thời gian">Toàn thời gian</option>
+                                <option value="Bán thời gian">Bán thời gian</option>
+                                <option value="Thực tập">Thực tập</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 flex flex-wrap gap-2" id="major-chips"></div>
+
+                    <div id="job-list" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- DETAIL SCREEN -->
+                <div id="screen-detail" class="hidden max-w-5xl mx-auto">
+                    <button onclick="goBack()" class="mb-4 flex items-center text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Quay lại
+                    </button>
+                    <div id="detail-content"></div>
+                </div>
+
+                <!-- COMPANIES SCREEN -->
+                <div id="screen-companies" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-semibold">Doanh nghiệp tham gia</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Hơn 85 nhà tuyển dụng chất lượng cao</p>
+                    </div>
+                    
+                    <input type="text" id="company-search" placeholder="Tìm kiếm doanh nghiệp..." 
+                           oninput="filterCompanies()" 
+                           class="w-full max-w-md mb-6 bg-white dark:bg-slate-900 border dark:border-slate-700 rounded-3xl px-5 py-3 text-sm focus:outline-none">
+                    
+                    <div id="company-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                </div>
+
+                <!-- SAVED SCREEN -->
+                <div id="screen-saved" class="hidden">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-semibold">Việc làm đã lưu</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Danh sách các vị trí bạn quan tâm</p>
+                    </div>
+                    <div id="saved-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+                </div>
+
+            </div>
+        </div>
     </div>
-  `).join('');
-}
 
-function showCompanyJobs(company) {
-  showScreen('jobs');
-  document.getElementById('search-input').value = company;
-  filterJobs();
-}
+    <!-- Mobile Drawer -->
+    <div id="mobile-nav" onclick="toggleMobileNav()" class="hidden lg:hidden fixed inset-0 bg-black/50 z-[100]">
+        <div onclick="event.stopImmediatePropagation()" class="w-72 bg-white dark:bg-slate-900 h-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <div class="font-bold text-xl">Menu</div>
+                <button onclick="toggleMobileNav()" class="text-3xl text-slate-400">&times;</button>
+            </div>
+            <div class="space-y-1 text-[15px]">
+                <div onclick="showScreen('home'); toggleMobileNav()" class="flex items-center gap-x-3 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl cursor-pointer">
+                    <i class="fa-solid fa-home w-5"></i> <span>Tổng quan</span>
+                </div>
+                <div onclick="showScreen('jobs'); toggleMobileNav()" class="flex items-center gap-x-3 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl cursor-pointer">
+                    <i class="fa-solid fa-briefcase w-5"></i> <span>Việc làm</span>
+                </div>
+                <div onclick="showScreen('companies'); toggleMobileNav()" class="flex items-center gap-x-3 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl cursor-pointer">
+                    <i class="fa-solid fa-building w-5"></i> <span>Doanh nghiệp</span>
+                </div>
+                <div onclick="showScreen('saved'); toggleMobileNav()" class="flex items-center gap-x-3 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl cursor-pointer">
+                    <i class="fa-solid fa-bookmark w-5"></i> <span>Đã lưu</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-// ==================== NAVIGATION ====================
-function showScreen(screen) {
-  document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-  const el = document.getElementById('screen-' + screen);
-  if (el) el.style.display = 'block';
+    <script>
+        // ==================== CONFIG ====================
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT25DlAHBhi-VuKvGlJOP_WhjtMw-lPF-Syuz7_udrEWw10z0Q8kMS2Y2wbZf4k-n7eYx1zMTqTG-Js/pub?gid=210076867&single=true&output=csv";
 
-  const titles = {
-    home: {title: 'Tổng quan', sub: 'Chọn ngành để xem cơ hội việc làm phù hợp nhất'},
-    jobs: {title: 'Tất cả việc làm', sub: 'Tìm kiếm và lọc theo ngành, hình thức làm việc'},
-    detail: {title: 'Chi tiết vị trí', sub: ''},
-    companies: {title: 'Danh sách doanh nghiệp', sub: ''},
-    saved: {title: 'Việc làm đã lưu', sub: ''}
-  };
-  
-  if (titles[screen]) {
-    document.getElementById('page-title').textContent = titles[screen].title;
-    document.getElementById('page-subtitle').textContent = titles[screen].sub;
-  }
+        const MAJORS = [
+            { id: 'ke-toan', name: 'Kế toán', icon: '💰' },
+            { id: 'kiem-toan', name: 'Kiểm toán', icon: '🔍' },
+            { id: 'tai-chinh', name: 'Tài chính - Ngân hàng', icon: '🏦' },
+            { id: 'quan-tri', name: 'Quản trị kinh doanh', icon: '📊' },
+            { id: 'marketing', name: 'Marketing', icon: '📣' },
+            { id: 'kinh-doanh-qt', name: 'Kinh doanh quốc tế', icon: '🌏' },
+            { id: 'cntt', name: 'Hệ thống thông tin', icon: '💻' },
+            { id: 'luat-kt', name: 'Luật kinh tế', icon: '⚖️' }
+        ];
 
-  currentScreen = screen;
+        let JOBS = [];
+        let savedJobs = new Set();
+        let selectedMajor = '';
+        let currentScreen = 'home';
+        let currentJob = null;
 
-  // Update active nav link
-  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-  
-  if (screen === 'home') {
-    document.querySelector('.nav-link[onclick*="home"]')?.classList.add('active');
-  } else if (screen === 'jobs' || screen === 'detail') {
-    document.getElementById('nav-jobs')?.classList.add('active');
-  } else if (screen === 'companies') {
-    document.querySelector('.nav-link[onclick*="companies"]')?.classList.add('active');
-  } else if (screen === 'saved') {
-    document.querySelector('.nav-link[onclick*="saved"]')?.classList.add('active');
-  }
+        // ==================== DATA ====================
+        async function loadData() {
+            try {
+                const res = await fetch(SHEET_URL);
+                const text = await res.text();
+                const rows = parseCSV(text);
 
-  if (screen === 'saved') renderSaved();
-  if (screen === 'companies') filterCompanies();
-  if (screen === 'jobs') filterJobs();
+                JOBS = rows.map((r, i) => ({
+                    id: i + 1,
+                    company: r.company || '',
+                    logo: (r.company || '??').substring(0, 2).toUpperCase(),
+                    title: r.title || '',
+                    majors: (r.majors || '').split('|').map(m => m.trim()).filter(Boolean),
+                    type: r.type || 'Toàn thời gian',
+                    count: parseInt(r.count) || 1,
+                    salary: r.salary || 'Thỏa thuận',
+                    location: r.location || 'Đà Nẵng',
+                    desc: r.desc || '',
+                    jd: (r.jd || '').split('|').map(s => s.trim()).filter(Boolean),
+                    req: (r.req || '').split('|').map(s => s.trim()).filter(Boolean),
+                    welfare: (r.welfare || '').split('|').map(s => s.trim()).filter(Boolean),
+                }));
 
-  if (window.innerWidth <= 1024) {
-    document.getElementById('sidebar').classList.remove('open');
-  }
-}
+                initUI();
+            } catch (e) {
+                console.error(e);
+                document.getElementById('main-content').innerHTML = `
+                    <div class="max-w-md mx-auto mt-20 text-center">
+                        <i class="fa-solid fa-exclamation-triangle text-5xl text-orange-400 mb-4"></i>
+                        <h3 class="font-semibold text-xl">Không thể tải dữ liệu</h3>
+                        <p class="text-sm text-slate-500 mt-1">Vui lòng kiểm tra kết nối hoặc SHEET_URL.</p>
+                    </div>
+                `;
+            }
+        }
 
-function goBack() {
-  showScreen(currentScreen === 'detail' ? 'jobs' : 'home');
-}
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            if (lines.length < 2) return [];
+            const headers = parseCSVRow(lines[0]);
+            return lines.slice(1).map(line => {
+                const values = parseCSVRow(line);
+                const obj = {};
+                headers.forEach((h, idx) => obj[h.trim()] = (values[idx] || '').trim());
+                return obj;
+            }).filter(r => r.company);
+        }
 
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
+        function parseCSVRow(line) {
+            const result = [];
+            let cur = '', inQuote = false;
+            for (let i = 0; i < line.length; i++) {
+                const c = line[i];
+                if (c === '"') {
+                    if (inQuote && line[i+1] === '"') { cur += '"'; i++; }
+                    else inQuote = !inQuote;
+                } else if (c === ',' && !inQuote) { result.push(cur); cur = ''; }
+                else cur += c;
+            }
+            result.push(cur);
+            return result;
+        }
 
-// ==================== INIT ====================
-loadData();
-</script>
+        // ==================== UI INIT ====================
+        function initUI() {
+            document.getElementById('nav-jobs-count').textContent = JOBS.length;
+            buildMajorGrid();
+            buildFilterSelects();
+            showScreen('home');
+            updateRecommendedJobs();
+        }
+
+        function buildMajorGrid() {
+            const container = document.getElementById('major-grid');
+            container.innerHTML = MAJORS.map(m => `
+                <div onclick="selectMajorFromHome('${m.id}')" 
+                     class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-300 rounded-3xl p-4 flex items-center gap-x-4 cursor-pointer modern-card">
+                    <div class="text-3xl w-9">${m.icon}</div>
+                    <div class="font-semibold text-sm leading-tight">${m.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectMajorFromHome(majorId) {
+            selectedMajor = majorId;
+            showScreen('jobs');
+            document.getElementById('filter-major').value = majorId;
+            filterJobs();
+        }
+
+        function buildFilterSelects() {
+            const sel = document.getElementById('filter-major');
+            sel.innerHTML = `<option value="">Tất cả ngành</option>` + MAJORS.map(m => `<option value="${m.id}">${m.name}</option>`).join('');
+
+            const chips = document.getElementById('major-chips');
+            chips.innerHTML = `<div onclick="setMajorFilter('')" class="cursor-pointer px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 ${!selectedMajor ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900' : ''}">Tất cả</div>` +
+                MAJORS.map(m => `<div onclick="setMajorFilter('${m.id}')" class="cursor-pointer px-4 py-1.5 text-sm font-medium rounded-3xl border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 ${selectedMajor === m.id ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900' : ''}">${m.icon} ${m.name}</div>`).join('');
+        }
+
+        function setMajorFilter(id) {
+            selectedMajor = id;
+            document.getElementById('filter-major').value = id;
+            filterJobs();
+            buildFilterSelects();
+        }
+
+        // ==================== JOBS ====================
+        function filterJobs() {
+            const q = (document.getElementById('global-search')?.value || '').toLowerCase();
+            const major = document.getElementById('filter-major')?.value || selectedMajor;
+            const type = document.getElementById('filter-type')?.value || '';
+
+            let filtered = JOBS.filter(j => {
+                const matchQ = !q || (j.title + j.company).toLowerCase().includes(q);
+                const matchM = !major || j.majors.includes(major);
+                const matchT = !type || j.type === type;
+                return matchQ && matchM && matchT;
+            });
+
+            if (major) {
+                filtered.sort((a,b) => (b.majors.includes(major) ? 1 : 0) - (a.majors.includes(major) ? 1 : 0));
+            }
+
+            renderJobCards(filtered, major);
+        }
+
+        function renderJobCards(jobs, activeMajor = '') {
+            const container = document.getElementById('job-list');
+            if (!jobs.length) {
+                container.innerHTML = `<div class="col-span-full py-12 text-center text-slate-400">Không tìm thấy việc làm phù hợp.</div>`;
+                return;
+            }
+
+            container.innerHTML = jobs.map(job => {
+                const isMatch = activeMajor && job.majors.includes(activeMajor);
+                return `
+                    <div onclick="showDetail(${job.id})" class="job-card bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-5 cursor-pointer">
+                        <div class="flex gap-x-4">
+                            <div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl flex-shrink-0 flex items-center justify-center font-bold text-lg">
+                                ${job.logo}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="font-semibold text-[15px] leading-tight">${job.title}</div>
+                                <div class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">${job.company}</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex flex-wrap gap-1.5">
+                            ${job.majors.slice(0,2).map(mid => {
+                                const m = MAJORS.find(x => x.id === mid);
+                                return m ? `<span class="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-3 py-px rounded-2xl font-medium">${m.name}</span>` : '';
+                            }).join('')}
+                            <span class="text-xs bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-3 py-px rounded-2xl font-medium">${job.type}</span>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t dark:border-slate-700 flex items-center justify-between text-sm">
+                            <div class="text-slate-500 dark:text-slate-400">
+                                <i class="fa-solid fa-map-marker-alt mr-1.5"></i>${job.location}
+                            </div>
+                            <div class="font-semibold text-emerald-600 dark:text-emerald-400">${job.salary}</div>
+                        </div>
+
+                        ${isMatch ? `<div class="mt-3 text-xs bg-emerald-500 text-white inline-block px-3 py-0.5 rounded-2xl font-medium">Phù hợp với ngành của bạn</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateRecommendedJobs() {
+            const container = document.getElementById('recommended-jobs');
+            let rec = selectedMajor ? JOBS.filter(j => j.majors.includes(selectedMajor)) : [...JOBS];
+            rec = rec.slice(0, 6);
+
+            if (!rec.length) {
+                container.innerHTML = `<div class="col-span-full text-sm text-slate-400 py-4">Chọn ngành ở trên để xem việc làm phù hợp</div>`;
+                return;
+            }
+
+            container.innerHTML = rec.map(job => `
+                <div onclick="showDetail(${job.id})" class="bg-white dark:bg-slate-900 border dark:border-slate-700 rounded-3xl p-5 cursor-pointer hover:shadow-md transition-all">
+                    <div class="flex gap-x-3">
+                        <div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-bold flex-shrink-0">${job.logo}</div>
+                        <div class="min-w-0">
+                            <div class="font-semibold text-sm leading-tight">${job.title}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">${job.company}</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-emerald-600 dark:text-emerald-400 font-medium">${job.salary} • ${job.location}</div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== DETAIL ====================
+        function showDetail(id) {
+            const job = JOBS.find(j => j.id === id);
+            if (!job) return;
+            currentJob = job;
+
+            const html = `
+                <div class="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border dark:border-slate-700">
+                    <div class="due-gradient p-8 text-white">
+                        <div class="flex items-start gap-x-5">
+                            <div class="w-16 h-16 bg-white/25 rounded-2xl flex-shrink-0 flex items-center justify-center text-3xl font-bold">${job.logo}</div>
+                            <div>
+                                <div class="text-sm opacity-75">${job.company}</div>
+                                <h2 class="text-3xl font-bold tracking-tight mt-1">${job.title}</h2>
+                                <div class="flex items-center gap-x-4 mt-3 text-sm opacity-90">
+                                    <div><i class="fa-solid fa-map-marker-alt mr-1"></i> ${job.location}</div>
+                                    <div><i class="fa-solid fa-users mr-1"></i> ${job.count} chỉ tiêu</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 grid lg:grid-cols-12 gap-8">
+                        <div class="lg:col-span-7">
+                            <div class="grid grid-cols-2 gap-4 mb-8">
+                                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4">
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">Hình thức</div>
+                                    <div class="font-semibold mt-1">${job.type}</div>
+                                </div>
+                                <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4">
+                                    <div class="text-xs text-slate-500 dark:text-slate-400">Mức lương</div>
+                                    <div class="font-semibold mt-1 text-emerald-600 dark:text-emerald-400">${job.salary}</div>
+                                </div>
+                            </div>
+
+                            ${job.desc ? `<div class="mb-8"><div class="font-semibold mb-2">Về công ty</div><p class="text-sm text-slate-600 dark:text-slate-300">${job.desc}</p></div>` : ''}
+
+                            ${job.jd.length ? `<div class="mb-8"><div class="font-semibold mb-3">Mô tả công việc</div><ul class="space-y-2 text-sm">${job.jd.map(x => `<li class="flex gap-x-2"><span class="text-emerald-500 mt-1">•</span> <span>${x}</span></li>`).join('')}</ul></div>` : ''}
+
+                            ${job.req.length ? `<div><div class="font-semibold mb-3">Yêu cầu ứng viên</div><ul class="space-y-2 text-sm">${job.req.map(x => `<li class="flex gap-x-2"><span class="text-emerald-500 mt-1">•</span> <span>${x}</span></li>`).join('')}</ul></div>` : ''}
+                        </div>
+
+                        <div class="lg:col-span-5">
+                            <div class="bg-slate-50 dark:bg-slate-800 rounded-3xl p-6 sticky top-6">
+                                <h4 class="font-semibold mb-5">Ứng tuyển nhanh</h4>
+                                <div class="space-y-4">
+                                    <div><label class="text-xs font-medium text-slate-500 dark:text-slate-400 block mb-1">Họ và tên *</label><input id="apply-name" type="text" class="w-full border dark:border-slate-700 dark:bg-slate-900 rounded-2xl px-4 py-3 text-sm"></div>
+                                    <div><label class="text-xs font-medium text-slate-500 dark:text-slate-400 block mb-1">Email sinh viên *</label><input id="apply-email" type="email" placeholder="sv@due.edu.vn" class="w-full border dark:border-slate-700 dark:bg-slate-900 rounded-2xl px-4 py-3 text-sm"></div>
+                                    <div><label class="text-xs font-medium text-slate-500 dark:text-slate-400 block mb-1">Mã số sinh viên *</label><input id="apply-mssv" type="text" class="w-full border dark:border-slate-700 dark:bg-slate-900 rounded-2xl px-4 py-3 text-sm"></div>
+                                </div>
+                                <button onclick="submitApplication()" class="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5 rounded-2xl">Gửi hồ sơ ứng tuyển</button>
+                                <button onclick="toggleSave(${job.id})" class="mt-3 w-full border dark:border-slate-700 py-3 rounded-2xl text-sm font-medium">${savedJobs.has(job.id) ? '❤️ Đã lưu' : '🤍 Lưu việc làm'}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('detail-content').innerHTML = html;
+            showScreen('detail');
+        }
+
+        function submitApplication() {
+            const name = document.getElementById('apply-name').value.trim();
+            if (!name) { alert("Vui lòng nhập họ tên!"); return; }
+            alert(`Cảm ơn ${name}! Hồ sơ đã được gửi thành công.`);
+            showScreen('jobs');
+        }
+
+        // ==================== SAVE ====================
+        function toggleSave(id) {
+            if (savedJobs.has(id)) savedJobs.delete(id); else savedJobs.add(id);
+            if (currentScreen === 'detail' && currentJob) showDetail(currentJob.id);
+            else if (currentScreen === 'saved') renderSavedJobs();
+        }
+
+        function renderSavedJobs() {
+            const container = document.getElementById('saved-list');
+            const saved = JOBS.filter(j => savedJobs.has(j.id));
+            if (!saved.length) {
+                container.innerHTML = `<div class="col-span-full py-16 text-center"><i class="fa-solid fa-bookmark text-5xl text-slate-200 dark:text-slate-700 mb-4"></i><p class="text-slate-400">Bạn chưa lưu việc làm nào.</p></div>`;
+                return;
+            }
+            container.innerHTML = saved.map(job => `
+                <div onclick="showDetail(${job.id})" class="bg-white dark:bg-slate-900 border dark:border-slate-700 rounded-3xl p-5 cursor-pointer">
+                    <div class="flex gap-x-4">
+                        <div class="w-11 h-11 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center font-bold">${job.logo}</div>
+                        <div><div class="font-semibold">${job.title}</div><div class="text-sm text-slate-500 dark:text-slate-400">${job.company}</div></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== COMPANIES ====================
+        function filterCompanies() {
+            const q = document.getElementById('company-search').value.toLowerCase();
+            const container = document.getElementById('company-list');
+            const map = new Map();
+            JOBS.forEach(j => {
+                if (!map.has(j.company)) map.set(j.company, {name: j.company, logo: j.logo, count: 0, slots: 0});
+                const c = map.get(j.company);
+                c.count++; c.slots += j.count;
+            });
+            let companies = Array.from(map.values());
+            if (q) companies = companies.filter(c => c.name.toLowerCase().includes(q));
+
+            container.innerHTML = companies.map(c => `
+                <div onclick="showCompanyJobs('${c.name}')" class="bg-white dark:bg-slate-900 border dark:border-slate-700 rounded-3xl p-5 cursor-pointer modern-card">
+                    <div class="flex gap-x-4">
+                        <div class="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex-shrink-0 flex items-center justify-center font-bold text-xl">${c.logo}</div>
+                        <div><div class="font-semibold">${c.name}</div><div class="text-sm text-emerald-600 dark:text-emerald-400 mt-1">${c.count} vị trí • ${c.slots} chỉ tiêu</div></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showCompanyJobs(company) {
+            showScreen('jobs');
+            document.getElementById('global-search').value = company;
+            filterJobs();
+        }
+
+        // ==================== NAVIGATION ====================
+        function showScreen(screen) {
+            document.querySelectorAll('[id^="screen-"]').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('screen-' + screen);
+            if (target) target.classList.remove('hidden');
+
+            currentScreen = screen;
+
+            const titles = {
+                home: {title: "Tổng quan", sub: "Chọn ngành để khám phá cơ hội việc làm phù hợp"},
+                jobs: {title: "Tất cả việc làm", sub: "Lọc và tìm kiếm vị trí mong muốn"},
+                detail: {title: "Chi tiết vị trí", sub: ""},
+                companies: {title: "Doanh nghiệp tham gia", sub: "Hơn 85 nhà tuyển dụng chất lượng cao"},
+                saved: {title: "Việc làm đã lưu", sub: "Danh sách bạn quan tâm"}
+            };
+
+            const t = titles[screen];
+            if (t) {
+                document.getElementById('page-title').textContent = t.title;
+                document.getElementById('page-subtitle').textContent = t.sub;
+            }
+
+            if (screen === 'jobs') filterJobs();
+            if (screen === 'companies') filterCompanies();
+            if (screen === 'saved') renderSavedJobs();
+            if (screen === 'home') updateRecommendedJobs();
+
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            const nav = document.getElementById('nav-' + screen);
+            if (nav) nav.classList.add('active');
+        }
+
+        function goBack() {
+            showScreen(currentScreen === 'detail' ? 'jobs' : 'home');
+        }
+
+        function handleGlobalSearch() {
+            if (currentScreen !== 'jobs') showScreen('jobs');
+            filterJobs();
+        }
+
+        function toggleMobileNav() {
+            document.getElementById('mobile-nav').classList.toggle('hidden');
+        }
+
+        // ==================== START ====================
+        loadData();
+    </script>
 </body>
 </html>
