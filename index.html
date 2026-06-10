@@ -919,17 +919,68 @@ function filterJobs() {
   const major = document.getElementById('filter-major').value;
   const type = document.getElementById('filter-type').value;
 
-  let filtered = JOBS.filter(j => {
-    const matchMajor = !major || j.majors.includes(major);
-    const matchType = !type || j.type === type;
-    // Tìm kiếm thông minh hơn
-    const searchText = (j.title + ' ' + j.company + ' ' + j.location + ' ' + j.desc + ' ' + j.majors.join(' ')).toLowerCase();
-    const matchQuery = !q || searchText.includes(q);
-    
-    return matchMajor && matchType && matchQuery;
-  });
+  // Hiệu ứng loading
+  const countBar = document.getElementById('count-bar');
+  countBar.innerHTML = `<span style="color:#94A3B8;">Đang lọc...</span>`;
 
-  document.getElementById('count-bar').textContent = `${filtered.length} vị trí`;
+  // Dùng setTimeout để tạo cảm giác mượt mà (dù xử lý rất nhanh)
+  setTimeout(() => {
+    let filtered = JOBS.filter(j => {
+      const matchMajor = !major || j.majors.includes(major);
+      const matchType = !type || j.type === type;
+      const searchText = (j.title + ' ' + j.company + ' ' + j.location + ' ' + j.desc + ' ' + j.majors.join(' ')).toLowerCase();
+      const matchQuery = !q || searchText.includes(q);
+      
+      return matchMajor && matchType && matchQuery;
+    });
+
+    countBar.textContent = `${filtered.length} vị trí`;
+
+    const container = document.getElementById('job-list');
+    if (!filtered.length) {
+      container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:50px 20px; color:#64748B;">Không tìm thấy vị trí phù hợp.</div>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map(job => `
+      <div class="job-card" onclick="showDetail(${job.id})">
+        <div class="job-header" style="margin-bottom:14px;">
+          ${getLogoHTML(job, 52)}
+          <div class="job-info">
+            <h3 style="font-size:17px; line-height:1.3; margin-bottom:4px;">${job.title}</h3>
+            <div class="company" style="font-size:14.5px;">${job.company}</div>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; font-size:13.5px; color:#475569;">
+          <span>📍 ${job.location}</span>
+          <span>•</span>
+          <span>${job.salary}</span>
+          ${job.deadline ? `<span style="color:#DC2626; font-weight:600;">• Hạn: ${job.deadline}</span>` : ''}
+        </div>
+
+        <div class="tags" style="margin-bottom:10px;">
+          ${job.is_new ? `<span class="tag" style="background:#FEE2E2; color:#DC2626; font-weight:700;">MỚI</span>` : ''}
+          ${job.majors.slice(0,2).map(mid => {
+            const m = MAJORS.find(x => x.id === mid);
+            return m ? `<span class="tag tag-major">${m.name}</span>` : '';
+          }).join('')}
+          ${job.majors.length > 2 ? `<span class="tag" style="background:#F1F5F9; color:#64748B;">+${job.majors.length - 2}</span>` : ''}
+          <span class="tag tag-type">${job.type}</span>
+        </div>
+
+        <div class="job-footer" style="padding-top:12px; margin-top:4px;">
+          <div style="font-size:13px; color:#64748B;">
+            ${job.count} chỉ tiêu
+          </div>
+          <div style="font-size:12.5px; font-weight:700; padding:5px 12px; border-radius:9999px; background:${job.majors.includes(major) ? '#DCFCE7' : '#F1F5F9'}; color:${job.majors.includes(major) ? '#166534' : '#64748B'};">
+            ${job.majors.includes(major) ? '✓ Phù hợp' : 'Xem chi tiết'}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }, 120);
+}
 
   const container = document.getElementById('job-list');
   if (!filtered.length) {
@@ -939,29 +990,40 @@ function filterJobs() {
 
   container.innerHTML = filtered.map(job => `
     <div class="job-card" onclick="showDetail(${job.id})">
-      <div class="job-header">
-        ${getLogoHTML(job, 56)}
+      <div class="job-header" style="margin-bottom:14px;">
+        ${getLogoHTML(job, 52)}
         <div class="job-info">
-          <h3>${job.title}</h3>
-          <div class="company">${job.company}</div>
+          <h3 style="font-size:17px; line-height:1.3; margin-bottom:4px;">${job.title}</h3>
+          <div class="company" style="font-size:14.5px;">${job.company}</div>
         </div>
       </div>
-      <div class="tags">
+
+      <!-- Key Info Row -->
+      <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; font-size:13.5px; color:#475569;">
+        <span>📍 ${job.location}</span>
+        <span>•</span>
+        <span>${job.salary}</span>
+        ${job.deadline ? `<span style="color:#DC2626; font-weight:600;">• Hạn: ${job.deadline}</span>` : ''}
+      </div>
+
+      <!-- Tags -->
+      <div class="tags" style="margin-bottom:10px;">
         ${job.is_new ? `<span class="tag" style="background:#FEE2E2; color:#DC2626; font-weight:700;">MỚI</span>` : ''}
         ${job.majors.slice(0,2).map(mid => {
           const m = MAJORS.find(x => x.id === mid);
           return m ? `<span class="tag tag-major">${m.name}</span>` : '';
         }).join('')}
+        ${job.majors.length > 2 ? `<span class="tag" style="background:#F1F5F9; color:#64748B;">+${job.majors.length - 2}</span>` : ''}
         <span class="tag tag-type">${job.type}</span>
-        <span class="tag tag-count">${job.count} chỉ tiêu</span>
       </div>
-      <div class="job-footer">
-        <div style="color:#64748B; font-size:13px;">
-          📍 ${job.location} • ${job.salary}
-          ${job.deadline ? ` • <span style="color:#DC2626; font-weight:600;">Hạn: ${job.deadline}</span>` : ''}
+
+      <!-- Footer -->
+      <div class="job-footer" style="padding-top:12px; margin-top:4px;">
+        <div style="font-size:13px; color:#64748B;">
+          ${job.count} chỉ tiêu
         </div>
-        <div style="font-size:12.5px; font-weight:700; padding:5px 13px; border-radius:9999px; background:${job.majors.includes(major) ? '#DCFCE7' : '#F1F5F9'}; color:${job.majors.includes(major) ? '#166534' : '#64748B'};">
-          ${job.majors.includes(major) ? '✓ Phù hợp' : 'Chi tiết'}
+        <div style="font-size:12.5px; font-weight:700; padding:5px 12px; border-radius:9999px; background:${job.majors.includes(major) ? '#DCFCE7' : '#F1F5F9'}; color:${job.majors.includes(major) ? '#166534' : '#64748B'};">
+          ${job.majors.includes(major) ? '✓ Phù hợp' : 'Xem chi tiết'}
         </div>
       </div>
     </div>
@@ -1006,45 +1068,54 @@ function showDetail(id) {
             ${job.jd.length ? `<div style="margin-bottom:30px;"><h4 style="font-size:13px; color:#64748B; margin-bottom:8px; font-weight:700;">MÔ TẢ CÔNG VIỆC</h4><ul style="padding-left:22px; color:#334155;">${job.jd.map(x => `<li style="margin-bottom:6px;">${x}</li>`).join('')}</ul></div>` : ''}
           </div>
 
-          <!-- Contact Information -->
-          <div style="background:#F8FAFC; border-radius:22px; padding:26px; position:sticky; top:20px; height:fit-content;">
-            <h3 style="margin-top:0; margin-bottom:16px;">Thông tin liên hệ</h3>
+          <!-- Contact + Apply Sidebar -->
+          <div style="background:#F8FAFC; border-radius:20px; padding:24px; position:sticky; top:20px; height:fit-content; border:1px solid #E2E8F0;">
+            <h3 style="margin:0 0 16px 0; font-size:17px;">Thông tin liên hệ</h3>
             
             <div style="margin-bottom:14px;">
-              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Email tuyển dụng</div>
-              <div style="font-size:15px; font-weight:600;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <span style="font-size:15px;">✉️</span>
+                <span style="font-size:12.5px; color:#64748B; font-weight:600;">Email tuyển dụng</span>
+              </div>
+              <div style="font-size:15px; font-weight:600; padding-left:24px;">
                 ${job.email ? `<a href="mailto:${job.email}" style="color:#1E40AF; text-decoration:none;">${job.email}</a>` : 'Chưa có thông tin'}
               </div>
             </div>
             
+            ${job.phone ? `
             <div style="margin-bottom:14px;">
-              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Số điện thoại</div>
-              <div style="font-size:15px; font-weight:600;">
-                ${job.phone ? job.phone : 'Chưa có thông tin'}
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <span style="font-size:15px;">📞</span>
+                <span style="font-size:12.5px; color:#64748B; font-weight:600;">Số điện thoại</span>
               </div>
-            </div>
-            
-            <div style="margin-bottom:18px;">
-              <div style="font-size:12.5px; color:#64748B; font-weight:700; margin-bottom:4px;">Website</div>
-              <div style="font-size:15px; font-weight:600;">
-                ${job.website 
-                  ? `<a href="${job.website.startsWith('http') ? job.website : 'https://' + job.website}" target="_blank" style="color:#1E40AF; text-decoration:none;">${job.website}</a>` 
-                  : 'Chưa có thông tin'}
-              </div>
-            </div>
-
-            <!-- Quick Apply -->
-            ${job.email ? `
-            <div style="margin-bottom:16px;">
-              <button onclick="quickApply(${job.id})" 
-                      style="width:100%; padding:13px; background: linear-gradient(to right, #F97316, #EA580C); color:white; border:none; border-radius:14px; font-weight:700; font-size:15px; cursor:pointer;">
-                🚀 Ứng tuyển nhanh
-              </button>
+              <div style="font-size:15px; font-weight:600; padding-left:24px;">${job.phone}</div>
             </div>` : ''}
 
-            <div style="padding-top:16px; border-top:1px solid #E2E8F0;">
-              <button onclick="toggleSave(${job.id})" style="width:100%; padding:12px; background:white; border:1px solid #CBD5E1; border-radius:14px; font-weight:700; font-size:14.5px;">
-                ${savedJobs.has(job.id) ? '❤️ Đã lưu' : '🤍 Lưu việc làm'}
+            ${job.website ? `
+            <div style="margin-bottom:18px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                <span style="font-size:15px;">🌐</span>
+                <span style="font-size:12.5px; color:#64748B; font-weight:600;">Website</span>
+              </div>
+              <div style="font-size:15px; font-weight:600; padding-left:24px;">
+                <a href="${job.website.startsWith('http') ? job.website : 'https://' + job.website}" target="_blank" style="color:#1E40AF; text-decoration:none;">${job.website}</a>
+              </div>
+            </div>` : ''}
+
+            <!-- Quick Apply Button -->
+            ${job.email ? `
+            <div style="margin: 20px 0 12px;">
+              <button onclick="quickApply(${job.id})" 
+                      style="width:100%; padding:14px; background: linear-gradient(to right, #F97316, #EA580C); color:white; border:none; border-radius:14px; font-weight:700; font-size:15.5px; cursor:pointer; box-shadow: 0 4px 12px rgba(249,115,22,0.3);">
+                🚀 Ứng tuyển nhanh
+              </button>
+              <div style="text-align:center; font-size:11.5px; color:#64748B; margin-top:6px;">Mở Gmail với nội dung sẵn</div>
+            </div>` : ''}
+
+            <div style="padding-top:14px; border-top:1px solid #E2E8F0; margin-top:8px;">
+              <button onclick="toggleSave(${job.id})" 
+                      style="width:100%; padding:11px; background:white; border:1px solid #CBD5E1; border-radius:12px; font-weight:600; font-size:14px;">
+                ${savedJobs.has(job.id) ? '❤️ Đã lưu việc làm' : '🤍 Lưu việc làm'}
               </button>
             </div>
           </div>
@@ -1115,28 +1186,49 @@ function filterCompanies(query = '') {
   const map = new Map();
   
   JOBS.forEach(j => {
-    if (!map.has(j.company)) map.set(j.company, {company: j.company, logo: j.logo, count: 0, slots: 0});
+    if (!map.has(j.company)) {
+      map.set(j.company, {
+        company: j.company,
+        logo: j.logo,
+        count: 0,
+        slots: 0,
+        titles: new Set()
+      });
+    }
     const c = map.get(j.company);
-    c.count++; c.slots += j.count;
+    c.count++;
+    c.slots += j.count;
+    c.titles.add(j.title);
   });
 
   let companies = Array.from(map.values());
   if (query) companies = companies.filter(c => c.company.toLowerCase().includes(query.toLowerCase()));
 
-  container.innerHTML = companies.map(c => `
-    <div class="job-card" onclick="showCompanyJobs('${c.company}')">
-      <div class="job-header">
-        ${c.logo && c.logo.startsWith('http') 
-          ? `<img src="${c.logo}" style="width:56px; height:56px; object-fit:contain; border-radius:12px; border:1px solid #E2E8F0;" alt="${c.company}">`
-          : `<div style="width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:19px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${c.logo || c.company.substring(0,2).toUpperCase()}</div>`
-        }
-        <div class="job-info">
-          <h3>${c.company}</h3>
-          <div class="company">${c.count} vị trí • ${c.slots} chỉ tiêu</div>
+  container.innerHTML = companies.map(c => {
+    const titles = Array.from(c.titles);
+    const preview = titles.slice(0, 2).join(' • ');
+    const more = titles.length > 2 ? ` +${titles.length - 2}` : '';
+
+    return `
+      <div class="job-card" onclick="showCompanyJobs('${c.company}')">
+        <div class="job-header">
+          ${c.logo && c.logo.startsWith('http') 
+            ? `<img src="${c.logo}" style="width:56px; height:56px; object-fit:contain; border-radius:12px; border:1px solid #E2E8F0;" alt="${c.company}">`
+            : `<div style="width:56px; height:56px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:19px; background:#F1F5F9; color:#334155; border-radius:12px; border:1px solid #E2E8F0;">${c.logo || c.company.substring(0,2).toUpperCase()}</div>`
+          }
+          <div class="job-info">
+            <h3>${c.company}</h3>
+            <div class="company" style="font-size:13.5px; color:#64748B; margin-top:2px;">
+              ${preview}${more}
+            </div>
+            <div style="font-size:13px; color:#475569; margin-top:4px;">
+              ${c.count} vị trí • ${c.slots} chỉ tiêu
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function showCompanyJobs(company) {
